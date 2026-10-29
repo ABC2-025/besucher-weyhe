@@ -150,12 +150,13 @@ label.f small{font-size:14px}
   .btn{min-width:0;padding:16px 20px}
 }
 </style>
+<link rel="stylesheet" href="abc-stil.css">
 </head>
 <body>
 <div class="app" id="app">
   <div class="offline" id="offline"></div>
   <header class="top">
-    <div class="brand"><div class="logo">ABC</div><div><span id="t_firma_kurz">ABC Kochwerk</span><small id="t_site"></small></div></div>
+    <div class="brand"><img class="abc" src="img/abc-logo.svg" alt="ABC Kochwerk"><div class="kopf"><span class="eb" id="t_eb"></span><small id="t_site"></small></div></div>
     <div class="top-r"><div class="clock" id="clock"></div>
       <div class="lang"><button data-lang="de" class="on">Deutsch</button><button data-lang="en">English</button></div>
     </div>
@@ -271,7 +272,7 @@ const API = {
 
 /* Feste Bedienelemente (Inhalte/Felder/Belehrung kommen aus „Formular & Texte“ in der Verwaltung) */
 const UI = {
-de:{ btn_in:'Anmelden', btn_in_sub:'Ich komme an', btn_out:'Abmelden', btn_out_sub:'Ich gehe',
+de:{ eb:'Besucheranmeldung', btn_in:'Anmelden', btn_in_sub:'Ich komme an', btn_out:'Abmelden', btn_out_sub:'Ich gehe',
   s1:'1 · Ihre Angaben', s1_sub:'Pflichtfelder sind mit * gekennzeichnet.', cancel:'Abbrechen', next:'Weiter', back:'Zurück',
   err_req:'Bitte füllen Sie alle Pflichtfelder aus.', err_mail:'Bitte prüfen Sie die E-Mail-Adresse.', optional:'(optional)',
   s2:'2 · Hygienebelehrung', scroll:'Bitte bis zum Ende lesen', err_bel:'Bitte bestätigen Sie die Belehrung.',
@@ -292,7 +293,7 @@ de:{ btn_in:'Anmelden', btn_in_sub:'Ich komme an', btn_out:'Abmelden', btn_out_s
   out_done:n=>`Auf Wiedersehen, ${n}!`, out_done_time:t=>`Abgemeldet um ${t} Uhr`,
   offline:'Keine Internetverbindung – Anmeldung gerade nicht möglich. Bitte am Empfang melden.',
   err_net:'Speichern fehlgeschlagen. Bitte erneut versuchen oder am Empfang melden.', ds_title:'Datenschutzhinweis (Art. 13 DSGVO)' },
-en:{ btn_in:'Sign in', btn_in_sub:'I am arriving', btn_out:'Sign out', btn_out_sub:'I am leaving',
+en:{ eb:'Visitor registration', btn_in:'Sign in', btn_in_sub:'I am arriving', btn_out:'Sign out', btn_out_sub:'I am leaving',
   s1:'1 · Your details', s1_sub:'Required fields are marked with *.', cancel:'Cancel', next:'Next', back:'Back',
   err_req:'Please complete all required fields.', err_mail:'Please check the email address.', optional:'(optional)',
   s2:'2 · Hygiene briefing', scroll:'Please read to the end', err_bel:'Please confirm the briefing.',
@@ -363,14 +364,13 @@ function resetState(){
 function applyLang(){
   document.documentElement.lang=lang;
   $$('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
-  const ui={t_btn_in:'btn_in',t_btn_in_sub:'btn_in_sub',t_btn_out:'btn_out',t_btn_out_sub:'btn_out_sub',t_s1:'s1',t_s1_sub:'s1_sub',t_cancel1:'cancel',next1:'next',
+  const ui={t_eb:'eb',t_btn_in:'btn_in',t_btn_in_sub:'btn_in_sub',t_btn_out:'btn_out',t_btn_out_sub:'btn_out_sub',t_s1:'s1',t_s1_sub:'s1_sub',t_cancel1:'cancel',next1:'next',
     t_s2:'s2',t_scroll:'scroll',t_back2:'back',next2:'next',t_s3:'s3',t_s3_sub:'s3_sub',t_hz_yes:'hz_yes',t_hz_yes_sub:'hz_yes_sub',t_hz_no:'hz_no',t_hz_no_sub:'hz_no_sub',
     t_back3:'back',next3:'next',t_s4:'s4',t_s4_sub:'s4_sub',t_sig_ph:'sig_ph',t_sig_info:'sig_info',sig_clear:'sig_clear',t_ck_ds:'ck_ds',open_ds:'open_ds',t_back4:'back',submit:'submit',
     t_out:'out',t_out_sub:'out_sub',t_cancel_out:'cancel',t_ds_title:'ds_title'};
   for(const [id,k] of Object.entries(ui)){ const el=document.getElementById(id); if(el) el.textContent=u(k); }
   const cf={t_site:'site',t_welcome:'welcome',t_welcome_sub:'welcome_sub',t_start_hint:'start_hint',t_s2_sub:'s2_sub',t_ck_bel:'ck_bel'};
   for(const [id,k] of Object.entries(cf)) document.getElementById(id).textContent=tx(k);
-  $('#t_firma_kurz').textContent=(F.stammdaten?.firma||'ABC Kochwerk').replace(/\s+GmbH$/,'');
   $('#gz_text').innerHTML=formText(L(F.gesundheit?.text));
   $('#f_suche').placeholder=u('out_ph'); $('#offline').textContent=u('offline');
   $('#ds_text').innerHTML=formText(L(F.datenschutz),vars());

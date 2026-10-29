@@ -112,10 +112,11 @@ textarea.t:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px var(-
   .kpi{min-width:0;padding:8px 12px}.kpi b{font-size:20px}
 }
 </style>
+<link rel="stylesheet" href="abc-stil.css">
 </head>
 <body>
 <header>
-  <div class="brand"><div class="logo">ABC</div><div>Besucher · Verwaltung<small>ABC Kochwerk · Zentrale Weyhe</small></div></div>
+  <div class="brand"><img class="abc" src="img/abc-logo.svg" alt="ABC Kochwerk"><div class="kopf"><span class="eb">Besucher · Verwaltung</span><small>Zentrale Weyhe</small></div></div>
   <div class="user hide" id="userbox"><span class="nm" id="u_name"></span><button class="btn sm hide-m" id="b_pw">Passwort ändern</button><button class="btn sm" id="b_logout">Abmelden</button></div>
 </header>
 
@@ -332,7 +333,7 @@ async function detail(id){
   }catch(e){ msg('#m_app',esc(e.message)); }
 }
 function printNachweis(d){
-  $('#print').innerHTML=`<h1>Nachweis Hygienebelehrung – ${esc(SD().firma)}</h1><p>${esc(SD().standort)} · ${esc(SD().adresse)}</p>
+  $('#print').innerHTML=`<img src="img/abc-logo.svg" style="height:46px;margin-bottom:10px"><h1>Nachweis Hygienebelehrung – ${esc(SD().firma)}</h1><p>${esc(SD().standort)} · ${esc(SD().adresse)}</p>
    <table><tr><th>Name</th><td>${esc(d.vorname)} ${esc(d.nachname)}</td><th>Firma</th><td>${esc(d.firma||'–')}</td></tr>
    <tr><th>Angemeldet</th><td>${dt(d.checkin_at)}</td><th>Abgemeldet</th><td>${d.checkout_at?dt(d.checkout_at):'–'}</td></tr>
    <tr><th>Ansprechpartner</th><td>${esc(d.ansprechpartner)}</td><th>Gruppe / Bereich</th><td>${esc(d.besuchergruppe)} / ${esc(d.bereich)}</td></tr>
@@ -345,7 +346,7 @@ function printNachweis(d){
 }
 $('#b_evak').onclick=()=>{
   const r=ROWS.filter(x=>!x.checkout_at);
-  $('#print').innerHTML=`<h1>Evakuierungsliste Besucher – ${esc(SD().standort)}</h1><p>Stand: ${dt(new Date())} · ${r.length} Person(en) im Haus · gedruckt von ${esc(ME.name)}</p>
+  $('#print').innerHTML=`<img src="img/abc-logo.svg" style="height:46px;margin-bottom:10px"><h1>Evakuierungsliste Besucher – ${esc(SD().standort)}</h1><p>Stand: ${dt(new Date())} · ${r.length} Person(en) im Haus · gedruckt von ${esc(ME.name)}</p>
    <table><tr><th style="width:28px">✓</th><th>Name</th><th>Firma</th><th>Ansprechpartner</th><th>Bereich</th><th>Seit</th><th>Telefon</th></tr>
    ${r.map(x=>`<tr><td></td><td>${esc(x.vorname)} ${esc(x.nachname)}</td><td>${esc(x.firma||'')}</td><td>${esc(x.ansprechpartner)}</td><td>${esc(x.bereich)}</td><td>${hhmm(x.checkin_at)}</td><td>${esc(x.telefon||'')}</td></tr>`).join('')||'<tr><td colspan="7">Keine Besucher im Haus.</td></tr>'}</table>`;
   window.print();
