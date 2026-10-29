@@ -60,6 +60,39 @@ tr.row{cursor:pointer} tr.row:hover td{background:#FAFBFC}
 .det img{max-width:100%;max-height:180px;border:1px solid var(--line);border-radius:8px;background:#fff}
 .beltext{white-space:pre-wrap;background:var(--bg);border-radius:10px;padding:12px;font-size:12.5px;max-height:240px;overflow:auto}
 .hide{display:none!important}
+.ed{display:none}
+a.btn{text-decoration:none;display:inline-block}
+.ed.on{display:block}
+.ed-info{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--bg);border-radius:12px;padding:12px 16px;margin-bottom:14px}
+.ed-info .dirty{color:var(--pri-d);font-weight:700}
+.ed-sec{border:1px solid var(--line);border-radius:14px;margin-bottom:14px;background:#fff}
+.ed-sec>summary{cursor:pointer;padding:14px 18px;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.ed-sec>summary::-webkit-details-marker{display:none}
+.ed-sec>summary::after{content:'▾';color:var(--ink2)}
+.ed-sec[open]>summary::after{content:'▴'}
+.ed-sec>summary small{font-weight:500;color:var(--ink2);margin-left:8px}
+.ed-body{padding:0 18px 18px}
+.ed-hint{color:var(--ink2);font-size:13px;margin:0 0 10px}
+.ft{width:100%;border-collapse:collapse}
+.ft th{position:static;font-size:13px;padding:6px}
+.ft td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
+.ft input.t,.ft select.t{width:100%;padding:8px 10px;font-size:14px}
+.ft .mv{display:flex;flex-direction:column;gap:2px}
+.ft .mv button{border:1px solid var(--line);background:#fff;border-radius:6px;padding:0 6px;font-size:12px;line-height:18px}
+.ft .cb{text-align:center}
+.ft .cb input{width:20px;height:20px;accent-color:var(--pri)}
+.ft tr.sub td{background:#FAFBFC;border-bottom:1px solid var(--line)}
+.ft tr.off td{opacity:.55}
+textarea.t{width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1.5px solid #CBD0D6;border-radius:10px;min-height:70px;resize:vertical}
+textarea.t:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-l)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two label{font-size:12px;color:var(--ink2);font-weight:600;display:block;margin-bottom:3px}
+.trow{padding:10px 0;border-bottom:1px solid var(--line)}
+.trow:last-child{border-bottom:0}
+.trow>b{display:block;margin-bottom:6px;font-size:14px}
+.bsec{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.bsec .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:700}
+.tag.fest{background:#EEF0F3;color:var(--ink2)}
 #print{display:none}
 @media print{
   body{background:#fff;font-size:11pt} header,main,.modal{display:none!important} #print{display:block}
@@ -73,6 +106,8 @@ tr.row{cursor:pointer} tr.row:hover td{background:#FAFBFC}
   header{padding:10px 14px} .brand small,.user .nm{display:none}
   main{padding:12px} .card{padding:14px}
   .det{grid-template-columns:1fr}
+  .two{grid-template-columns:1fr}
+  .ft{font-size:13px}
   .hide-m{display:none}
   .kpi{min-width:0;padding:8px 12px}.kpi b{font-size:20px}
 }
@@ -117,6 +152,7 @@ tr.row{cursor:pointer} tr.row:hover td{background:#FAFBFC}
           <button class="on" data-tab="haus">Jetzt im Haus</button>
           <button data-tab="verlauf">Verlauf</button>
           <button data-tab="nutzer" class="hide" id="tab_nutzer">Zugänge<span class="badge hide" id="badge_n"></span></button>
+          <button data-tab="formular" class="hide" id="tab_formular">Formular &amp; Texte</button>
         </div>
         <div class="tools" id="t_haus"><span class="upd" id="upd"></span><button class="btn g" id="b_evak">Evakuierungsliste drucken</button><button class="btn" id="b_reload">Aktualisieren</button></div>
         <div class="tools hide" id="t_verlauf">
@@ -125,9 +161,11 @@ tr.row{cursor:pointer} tr.row:hover td{background:#FAFBFC}
           <button class="btn" id="b_load">Anzeigen</button><button class="btn" id="b_csv">CSV-Export</button>
         </div>
         <div class="tools hide" id="t_nutzer"><button class="btn p" id="b_new">Zugang anlegen</button></div>
+        <div class="tools hide" id="t_formular"><a class="btn" href="./" target="_blank" rel="noopener">Tablet-Ansicht öffnen</a><button class="btn" id="fe_std">Standard laden</button><button class="btn" id="fe_reset">Verwerfen</button><button class="btn p" id="fe_save">Speichern &amp; veröffentlichen</button></div>
       </div>
       <div class="kpis" id="kpis"></div>
-      <div class="tblwrap"><table id="tbl"></table></div>
+      <div class="tblwrap" id="tblwrap"><table id="tbl"></table></div>
+      <div class="ed" id="formular"></div>
       <div class="msg err" id="m_app"></div>
     </div>
   </div>
@@ -153,6 +191,7 @@ tr.row{cursor:pointer} tr.row:hover td{background:#FAFBFC}
 </div></div>
 <div id="print"></div>
 
+<script src="formular-standard.js"></script>
 <script>
 const CONFIG = {
   supabaseUrl: 'https://ywmimuctohdmxkmexops.supabase.co',
@@ -205,6 +244,8 @@ function enter(){
   $('#v_login').classList.add('hide'); $('#v_app').classList.remove('hide'); $('#userbox').classList.remove('hide');
   $('#u_name').textContent=`${ME.name} (${ME.rolle==='admin'?'Admin':'Leser'})`;
   $('#tab_nutzer').classList.toggle('hide',ME.rolle!=='admin');
+  $('#tab_formular').classList.toggle('hide',ME.rolle!=='admin');
+  loadCfg();
   setTab('haus');
   clearInterval(timer); timer=setInterval(()=>{ if(TAB==='haus' && !document.hidden && !$('.modal.on')) load(); }, CONFIG.aktualisierenSekunden*1000);
   if(ME.rolle==='admin') loadUsers(true);
@@ -222,7 +263,9 @@ $$('#tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
 function setTab(t){
   TAB=t; $$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
   $('#t_haus').classList.toggle('hide',t!=='haus'); $('#t_verlauf').classList.toggle('hide',t!=='verlauf'); $('#t_nutzer').classList.toggle('hide',t!=='nutzer');
-  msg('#m_app',''); t==='nutzer'?loadUsers():load();
+  $('#t_formular').classList.toggle('hide',t!=='formular');
+  $('#kpis').classList.toggle('hide',t==='formular'); $('#tblwrap').classList.toggle('hide',t==='formular'); $('#formular').classList.toggle('on',t==='formular');
+  msg('#m_app',''); if(t==='formular') return feOpen(); t==='nutzer'?loadUsers():load();
 }
 $('#f_von').value=day(Date.now()-6*864e5); $('#f_bis').value=today();
 $('#b_reload').onclick=load; $('#b_load').onclick=load; $('#f_q').addEventListener('input',render);
@@ -231,7 +274,7 @@ $('#b_reload').onclick=load; $('#b_load').onclick=load; $('#f_q').addEventListen
 async function load(){
   try{
     const von=TAB==='haus'?today():$('#f_von').value, bis=TAB==='haus'?today():$('#f_bis').value;
-    ROWS=await rpc('besucher_liste',{p_token:TOKEN,von,bis});
+    ROWS=await rpc('besucher_liste_v2',{p_token:TOKEN,von,bis});
     $('#upd').textContent='Stand '+hhmm(new Date())+' · aktualisiert automatisch';
     render();
   }catch(e){ msg('#m_app',esc(e.message)); }
@@ -275,6 +318,7 @@ async function detail(id){
       ['Besuchergruppe',d.besuchergruppe],['Bereich',d.bereich],['Ansprechpartner',d.ansprechpartner],['Angemeldet',dt(d.checkin_at)],
       ['Abgemeldet',d.checkout_at?`${dt(d.checkout_at)} (${d.checkout_art})`:'noch im Haus'],['Belehrung',`bestätigt · ${d.belehrung_version} · Sprache ${String(d.sprache).toUpperCase()}`],
       ['Gesundheitserklärung',d.gesundheit_bestaetigt?'abgegeben – keine Hinderungsgründe nach § 42 IfSG':'NICHT abgegeben – kein Zutritt Küche/Produktion'],['Datenschutzhinweis','bestätigt']];
+    zusatz(d.angaben).forEach(([k,v])=>rr.splice(7,0,[k,v]));
     $('#det').innerHTML=`<div class="bar"><h2>Besuch · Nachweis</h2><div class="tools">
       ${!d.checkout_at?'<button class="btn" id="d_out">Abmelden</button>':''}<button class="btn" id="d_print">Nachweis drucken / PDF</button>
       ${ME.rolle==='admin'?'<button class="btn w" id="d_del">Löschen</button>':''}<button class="btn p" data-close>Schließen</button></div></div>
@@ -288,10 +332,11 @@ async function detail(id){
   }catch(e){ msg('#m_app',esc(e.message)); }
 }
 function printNachweis(d){
-  $('#print').innerHTML=`<h1>Nachweis Hygienebelehrung – ${esc(CONFIG.firma)}</h1><p>${esc(CONFIG.standort)} · ${esc(CONFIG.adresse)}</p>
+  $('#print').innerHTML=`<h1>Nachweis Hygienebelehrung – ${esc(SD().firma)}</h1><p>${esc(SD().standort)} · ${esc(SD().adresse)}</p>
    <table><tr><th>Name</th><td>${esc(d.vorname)} ${esc(d.nachname)}</td><th>Firma</th><td>${esc(d.firma||'–')}</td></tr>
    <tr><th>Angemeldet</th><td>${dt(d.checkin_at)}</td><th>Abgemeldet</th><td>${d.checkout_at?dt(d.checkout_at):'–'}</td></tr>
    <tr><th>Ansprechpartner</th><td>${esc(d.ansprechpartner)}</td><th>Gruppe / Bereich</th><td>${esc(d.besuchergruppe)} / ${esc(d.bereich)}</td></tr>
+   ${zusatz(d.angaben).map(([k,v])=>`<tr><th>${esc(k)}</th><td colspan="3">${esc(v)}</td></tr>`).join('')}
    <tr><th>Gesundheitserklärung</th><td colspan="3">${d.gesundheit_bestaetigt?'Abgegeben – keine Hinderungsgründe nach § 42 IfSG bekannt':'Nicht abgegeben – kein Zutritt zu Küche/Produktion'}</td></tr></table>
    <h3>Belehrungstext (${esc(d.belehrung_version)})</h3><div class="beltext">${esc(d.belehrung_text)}</div>
    <h3>Unterschrift (elektronisch erfasst am ${dt(d.checkin_at)})</h3><img src="${esc(d.unterschrift)}">
@@ -300,14 +345,16 @@ function printNachweis(d){
 }
 $('#b_evak').onclick=()=>{
   const r=ROWS.filter(x=>!x.checkout_at);
-  $('#print').innerHTML=`<h1>Evakuierungsliste Besucher – ${esc(CONFIG.standort)}</h1><p>Stand: ${dt(new Date())} · ${r.length} Person(en) im Haus · gedruckt von ${esc(ME.name)}</p>
+  $('#print').innerHTML=`<h1>Evakuierungsliste Besucher – ${esc(SD().standort)}</h1><p>Stand: ${dt(new Date())} · ${r.length} Person(en) im Haus · gedruckt von ${esc(ME.name)}</p>
    <table><tr><th style="width:28px">✓</th><th>Name</th><th>Firma</th><th>Ansprechpartner</th><th>Bereich</th><th>Seit</th><th>Telefon</th></tr>
    ${r.map(x=>`<tr><td></td><td>${esc(x.vorname)} ${esc(x.nachname)}</td><td>${esc(x.firma||'')}</td><td>${esc(x.ansprechpartner)}</td><td>${esc(x.bereich)}</td><td>${hhmm(x.checkin_at)}</td><td>${esc(x.telefon||'')}</td></tr>`).join('')||'<tr><td colspan="7">Keine Besucher im Haus.</td></tr>'}</table>`;
   window.print();
 };
 $('#b_csv').onclick=()=>{
   const r=rows(); const cols=[['checkin_at','Kommen'],['checkout_at','Gehen'],['checkout_art','Abmeldung'],['vorname','Vorname'],['nachname','Nachname'],['firma','Firma'],['email','E-Mail'],['telefon','Telefon'],['besuchergruppe','Gruppe'],['bereich','Bereich'],['ansprechpartner','Ansprechpartner'],['gesundheit_bestaetigt','Gesundheitserklärung'],['belehrung_version','Belehrung'],['sprache','Sprache']];
-  const v=(x,c)=>c.endsWith('_at')?dt(x[c]):c==='gesundheit_bestaetigt'?(x[c]?'ja':'nein'):(x[c]??'');
+  const extra=[...new Set(r.flatMap(x=>Object.keys(x.angaben||{})).filter(k=>!STD_KEYS.includes(k)))];
+  extra.forEach(k=>cols.splice(cols.length-3,0,['angaben.'+k,feldLabel(k)]));
+  const v=(x,c)=>c.startsWith('angaben.')?((x.angaben||{})[c.slice(8)]??''):c.endsWith('_at')?dt(x[c]):c==='gesundheit_bestaetigt'?(x[c]?'ja':'nein'):(x[c]??'');
   const csv='﻿'+[cols.map(c=>c[1]),...r.map(x=>cols.map(c=>v(x,c[0])))].map(row=>row.map(s=>`"${String(s).replace(/"/g,'""')}"`).join(';')).join('\r\n');
   const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download=`Besucher_${$('#f_von').value}_bis_${$('#f_bis').value}.csv`; a.click();
 };
@@ -355,6 +402,109 @@ $('#b_pw_ok').onclick=async()=>{
 };
 function bindClose(){ $$('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal').classList.remove('on')); }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') $$('.modal').forEach(m=>m.classList.remove('on')); });
+
+/* ================= FORMULAR & TEXTE (Admin) ================= */
+const STD_KEYS=['vorname','nachname','firma','email','telefon','besuchergruppe','ansprechpartner','bereich'];
+const clone=o=>JSON.parse(JSON.stringify(o));
+let CFG=null, CFG_ORIG='', FE_SAVED=null;
+const SD=()=>(CFG&&CFG.stammdaten)||FORMULAR_STANDARD.stammdaten;
+function feldLabel(k){ const f=((CFG&&CFG.felder)||FORMULAR_STANDARD.felder).find(x=>x.key===k); return f?f.label.de.replace(/\s*…$/,''):k; }
+function zusatz(a){ return Object.entries(a||{}).filter(([k])=>!STD_KEYS.includes(k)).map(([k,v])=>[feldLabel(k),v]); }
+function vervollst(c){ const S=clone(FORMULAR_STANDARD); c=c||{};
+  for(const k of ['stammdaten','texte','belehrung','gesundheit','datenschutz']) c[k]=c[k]?(k==='texte'||k==='stammdaten'?{...S[k],...c[k]}:c[k]):S[k];
+  if(!Array.isArray(c.felder)) c.felder=S.felder; return c; }
+async function loadCfg(){ try{ FE_SAVED=await rpc('besucher_formular_laden',{}); }catch(e){ FE_SAVED=null; }
+  CFG=vervollst(clone(FE_SAVED&&FE_SAVED.felder?FE_SAVED:FORMULAR_STANDARD)); CFG_ORIG=JSON.stringify(CFG); }
+const dirty=()=>CFG&&JSON.stringify(CFG)!==CFG_ORIG;
+window.addEventListener('beforeunload',e=>{ if(dirty()){ e.preventDefault(); e.returnValue=''; } });
+async function feOpen(){ if(!CFG) await loadCfg(); feRender(); }
+function getP(o,p){ return p.split('.').reduce((a,k)=>a==null?a:a[k],o); }
+function setP(o,p,v){ const k=p.split('.'); let x=o; for(let i=0;i<k.length-1;i++){ if(x[k[i]]==null) x[k[i]]={}; x=x[k[i]]; } x[k[k.length-1]]=v; }
+const TYPEN={text:'Text',email:'E-Mail',tel:'Telefon',auswahl:'Auswahl'};
+const TEXTE=[['site','Untertitel oben (neben Logo)'],['welcome','Begrüßung Startseite'],['welcome_sub','Text unter der Begrüßung'],['start_hint','Hinweis unten auf der Startseite'],
+  ['s2_sub','Einleitung zur Belehrung'],['ck_bel','Bestätigungssatz unter der Belehrung'],['done_text','Text nach der Anmeldung'],['out_done_text','Text nach der Abmeldung']];
+const ta=(p,rows)=>`<textarea class="t" data-p="${p}" rows="${rows||2}">${esc(getP(CFG,p)||'')}</textarea>`;
+const two=(p,rows)=>`<div class="two"><div><label>Deutsch</label>${ta(p+'.de',rows)}</div><div><label>English</label>${ta(p+'.en',rows)}</div></div>`;
+const optText=f=>(f.optionen||[]).map(o=>o.de+(o.en&&o.en!==o.de?' | '+o.en:'')).join('\n');
+let feOpenOpt=new Set();
+function feRender(){
+  const c=CFG, sv=FE_SAVED&&FE_SAVED.version;
+  const openSecs=[...$$('#formular details[open]')].map(d=>d.dataset.s);
+  const isOpen=k=>openSecs.length?openSecs.includes(k):k==='felder';
+  $('#formular').innerHTML=`
+  <div class="ed-info"><div>${sv?`Veröffentlicht: <b>Version ${sv}</b> · ${dt(FE_SAVED.gespeichert_am)} · ${esc(FE_SAVED.gespeichert_von||'')}`:'Noch nichts gespeichert – das Tablet nutzt die Standardwerte.'}
+    · Belehrung <b>${esc(c.belehrung.version)}</b></div><div id="fe_state"></div></div>
+  <div class="msg err" id="m_fe"></div>
+  <details class="ed-sec" data-s="felder" ${isOpen('felder')?'open':''}><summary>Abgefragte Angaben <small>Felder, Kategorien, Pflichtfelder, Reihenfolge</small></summary><div class="ed-body">
+    <p class="ed-hint">Vorname und Nachname sind immer Pflicht (für das Abmelden). Deaktivierte Felder werden auf dem Tablet nicht angezeigt, bleiben aber bei alten Besuchen sichtbar. Bei „Auswahl“ und „Text“ legen Sie unter „Werte“ die Kategorien bzw. Vorschläge fest.</p>
+    <table class="ft"><thead><tr><th></th><th>Bezeichnung (Deutsch)</th><th>Bezeichnung (English)</th><th style="width:150px">Art</th><th class="cb">Pflicht</th><th class="cb">Aktiv</th><th></th></tr></thead><tbody>
+    ${c.felder.map((f,i)=>{
+      const opt=f.typ==='auswahl'||feOpenOpt.has(f.key);
+      return `<tr class="${f.aktiv===false?'off':''}"><td><div class="mv"><button data-mv="${i}" data-d="-1" ${i===0?'disabled':''}>▲</button><button data-mv="${i}" data-d="1" ${i===c.felder.length-1?'disabled':''}>▼</button></div></td>
+      <td><input class="t" data-p="felder.${i}.label.de" value="${esc(f.label.de)}"></td><td><input class="t" data-p="felder.${i}.label.en" value="${esc(f.label.en||'')}"></td>
+      <td>${f.fest?'<span class="tag fest">Text (fest)</span>':`<select class="t" data-typ="${i}">${Object.entries(TYPEN).map(([k,v])=>`<option value="${k}" ${f.typ===k?'selected':''}>${v}</option>`).join('')}</select>`}</td>
+      <td class="cb"><input type="checkbox" data-b="felder.${i}.pflicht" ${f.pflicht?'checked':''} ${f.fest?'disabled':''}></td>
+      <td class="cb"><input type="checkbox" data-b="felder.${i}.aktiv" ${f.aktiv!==false?'checked':''} ${f.fest?'disabled':''}></td>
+      <td><div class="tools" style="flex-wrap:nowrap">${f.fest?'':`${f.typ!=='auswahl'&&!['email','tel'].includes(f.typ)?`<button class="btn sm" data-opt="${f.key}">${opt?'Vorschläge ▴':'Vorschläge'}</button>`:''}${STD_KEYS.includes(f.key)?'':`<button class="btn sm w" data-del="${i}">Entfernen</button>`}`}</div></td></tr>
+      ${opt&&!f.fest?`<tr class="sub"><td></td><td colspan="6"><label class="ed-hint" style="display:block;margin:0 0 4px">${f.typ==='auswahl'?'<b>Kategorien</b> – eine pro Zeile, optional mit englischer Übersetzung: <code>Deutsch | English</code>':'<b>Vorschläge</b> beim Tippen (eine pro Zeile, <code>Deutsch | English</code>) – frei eintippen bleibt möglich'}</label>
+        <textarea class="t" data-optta="${i}" rows="${Math.min(10,Math.max(3,(f.optionen||[]).length+1))}">${esc(optText(f))}</textarea></td></tr>`:''}`;}).join('')}
+    </tbody></table>
+    <div style="margin-top:10px"><button class="btn" id="fe_add">+ Feld hinzufügen</button></div>
+  </div></details>
+  <details class="ed-sec" data-s="texte" ${isOpen('texte')?'open':''}><summary>Texte auf dem Tablet <small>Begrüßung, Hinweise, Abschluss</small></summary><div class="ed-body">
+    ${TEXTE.map(([k,l])=>`<div class="trow"><b>${l}</b>${two('texte.'+k,2)}</div>`).join('')}
+  </div></details>
+  <details class="ed-sec" data-s="bel" ${isOpen('bel')?'open':''}><summary>Hygienebelehrung <small>${c.belehrung.abschnitte.length} Abschnitte</small></summary><div class="ed-body">
+    <p class="ed-hint">Format: Leerzeile = neuer Absatz · Zeile mit „- “ = Aufzählungspunkt · **Text** = fett. Bei inhaltlichen Änderungen erhält die Belehrung beim Speichern automatisch eine neue Versionsnummer – jeder Nachweis behält den Text, der unterschrieben wurde.</p>
+    ${c.belehrung.abschnitte.map((b,i)=>`<div class="bsec"><div class="hd"><span>Abschnitt ${i+1}</span><div class="tools"><button class="btn sm" data-bmv="${i}" data-d="-1" ${i===0?'disabled':''}>▲</button><button class="btn sm" data-bmv="${i}" data-d="1" ${i===c.belehrung.abschnitte.length-1?'disabled':''}>▼</button><button class="btn sm w" data-bdel="${i}">Entfernen</button></div></div>
+      <div class="two" style="margin-bottom:8px"><div><label>Überschrift Deutsch</label><input class="t full" data-p="belehrung.abschnitte.${i}.titel.de" value="${esc(b.titel.de)}"></div><div><label>Überschrift English</label><input class="t full" data-p="belehrung.abschnitte.${i}.titel.en" value="${esc(b.titel.en||'')}"></div></div>
+      ${two('belehrung.abschnitte.'+i+'.text',7)}</div>`).join('')}
+    <button class="btn" id="fe_badd">+ Abschnitt hinzufügen</button>
+  </div></details>
+  <details class="ed-sec" data-s="gz" ${isOpen('gz')?'open':''}><summary>Gesundheitserklärung (§ 42 IfSG)</summary><div class="ed-body">
+    <div class="trow"><b>Erklärungstext</b>${two('gesundheit.text',8)}</div>
+    <div class="trow"><b>Hinweis, wenn jemand „nicht bestätigen“ wählt</b>${two('gesundheit.warnung',3)}</div>
+  </div></details>
+  <details class="ed-sec" data-s="ds" ${isOpen('ds')?'open':''}><summary>Datenschutzhinweis</summary><div class="ed-body">
+    <p class="ed-hint">Platzhalter: {firma}, {adresse}, {kontakt} werden aus den Stammdaten eingesetzt. Löschfristen im Text bitte nur ändern, wenn sie auch in der Datenbank angepasst wurden.</p>${two('datenschutz',12)}
+  </div></details>
+  <details class="ed-sec" data-s="sd" ${isOpen('sd')?'open':''}><summary>Stammdaten</summary><div class="ed-body">
+    <div class="two"><div><label>Firma</label><input class="t full" data-p="stammdaten.firma" value="${esc(c.stammdaten.firma)}"></div><div><label>Standort</label><input class="t full" data-p="stammdaten.standort" value="${esc(c.stammdaten.standort)}"></div>
+    <div><label>Adresse</label><input class="t full" data-p="stammdaten.adresse" value="${esc(c.stammdaten.adresse)}"></div><div><label>Kontakt Datenschutz</label><input class="t full" data-p="stammdaten.datenschutzKontakt" value="${esc(c.stammdaten.datenschutzKontakt)}"></div></div>
+  </div></details>`;
+  const F=$('#formular');
+  F.querySelectorAll('[data-p]').forEach(el=>el.addEventListener('input',()=>{ setP(CFG,el.dataset.p,el.value); feState(); }));
+  F.querySelectorAll('[data-b]').forEach(el=>el.addEventListener('change',()=>{ setP(CFG,el.dataset.b,el.checked); feRender(); }));
+  F.querySelectorAll('[data-typ]').forEach(el=>el.addEventListener('change',()=>{ const f=CFG.felder[+el.dataset.typ]; f.typ=el.value; if(f.typ==='auswahl'&&!(f.optionen||[]).length) f.optionen=[{de:'Option 1',en:'Option 1'}]; feRender(); }));
+  F.querySelectorAll('[data-optta]').forEach(el=>el.addEventListener('input',()=>{ CFG.felder[+el.dataset.optta].optionen=el.value.split('\n').map(x=>x.trim()).filter(Boolean).map(x=>{ const [de,en]=x.split('|').map(y=>y.trim()); return {de,en:en||de}; }); feState(); }));
+  F.querySelectorAll('[data-opt]').forEach(el=>el.onclick=()=>{ const k=el.dataset.opt; feOpenOpt.has(k)?feOpenOpt.delete(k):feOpenOpt.add(k); feRender(); });
+  F.querySelectorAll('[data-mv]').forEach(el=>el.onclick=()=>{ const i=+el.dataset.mv, j=i+(+el.dataset.d); const a=CFG.felder; [a[i],a[j]]=[a[j],a[i]]; feRender(); });
+  F.querySelectorAll('[data-del]').forEach(el=>el.onclick=()=>{ const f=CFG.felder[+el.dataset.del]; if(confirm(`Feld „${f.label.de}“ entfernen? (Bei alten Besuchen bleibt der Wert gespeichert.)`)){ CFG.felder.splice(+el.dataset.del,1); feRender(); } });
+  F.querySelectorAll('[data-bmv]').forEach(el=>el.onclick=()=>{ const i=+el.dataset.bmv, j=i+(+el.dataset.d); const a=CFG.belehrung.abschnitte; [a[i],a[j]]=[a[j],a[i]]; feRender(); });
+  F.querySelectorAll('[data-bdel]').forEach(el=>el.onclick=()=>{ if(confirm('Abschnitt entfernen?')){ CFG.belehrung.abschnitte.splice(+el.dataset.bdel,1); feRender(); } });
+  $('#fe_add').onclick=()=>{ CFG.felder.push({key:'feld_'+Date.now().toString(36),typ:'text',pflicht:false,aktiv:true,label:{de:'Neues Feld',en:'New field'}}); feRender(); };
+  $('#fe_badd').onclick=()=>{ CFG.belehrung.abschnitte.push({titel:{de:'Neuer Abschnitt',en:'New section'},text:{de:'',en:''}}); feRender(); $$('#formular details[data-s=bel]')[0].open=true; };
+  feState();
+}
+function feState(){ const d=dirty(); $('#fe_state').innerHTML=d?'<span class="dirty">● Ungespeicherte Änderungen</span>':'<span style="color:var(--grn)">✓ Alles gespeichert</span>';
+  $('#fe_save').disabled=!d; $('#fe_reset').disabled=!d; }
+$('#fe_reset').onclick=()=>{ if(confirm('Alle ungespeicherten Änderungen verwerfen?')){ CFG=JSON.parse(CFG_ORIG); feRender(); } };
+$('#fe_std').onclick=()=>{ if(confirm('Alle Felder und Texte auf die ursprünglichen Standardwerte zurücksetzen? (Erst mit „Speichern“ wirksam.)')){ CFG=vervollst(clone(FORMULAR_STANDARD)); feRender(); } };
+$('#fe_save').onclick=async()=>{
+  msg('#m_fe','');
+  const keys=new Set(), fehler=[];
+  CFG.felder.forEach(f=>{ if(!f.label.de.trim()) fehler.push('Ein Feld hat keine deutsche Bezeichnung.'); if(!f.label.en||!f.label.en.trim()) f.label.en=f.label.de;
+    if(keys.has(f.key)) fehler.push('Doppeltes Feld: '+f.key); keys.add(f.key);
+    if(f.typ==='auswahl'&&!(f.optionen||[]).length) fehler.push(`„${f.label.de}“ braucht mindestens eine Kategorie.`);
+    if(f.typ!=='auswahl'&&f.typ!=='text') delete f.optionen; });
+  if(!CFG.belehrung.abschnitte.length) fehler.push('Die Belehrung braucht mindestens einen Abschnitt.');
+  if(fehler.length) return msg('#m_fe',fehler.map(esc).join('<br>'));
+  const alt=JSON.parse(CFG_ORIG), belNeu=JSON.stringify([CFG.belehrung.abschnitte,CFG.gesundheit.text,CFG.texte.ck_bel])!==JSON.stringify([alt.belehrung.abschnitte,alt.gesundheit.text,alt.texte.ck_bel]);
+  if(!confirm(`Änderungen veröffentlichen?${belNeu?'\n\nDie Belehrung hat sich geändert und erhält eine neue Versionsnummer.':''}\n\nDas Tablet übernimmt sie beim nächsten Zurückkehren zur Startseite (spätestens nach wenigen Minuten).`)) return;
+  if(belNeu){ const ym=today().slice(0,7); CFG.belehrung.version=`BEL-${ym}-v${(FE_SAVED&&FE_SAVED.version||0)+2}`; }
+  try{ FE_SAVED=await rpc('besucher_formular_speichern',{p_token:TOKEN,p_cfg:CFG}); CFG=vervollst(clone(FE_SAVED)); CFG_ORIG=JSON.stringify(CFG); feRender(); msg('#m_fe','Gespeichert und veröffentlicht.','ok'); }
+  catch(e){ msg('#m_fe',esc(e.message),'err'); }
+};
 
 start();
 </script>

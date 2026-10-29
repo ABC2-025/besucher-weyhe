@@ -65,6 +65,7 @@ input.t.err{border-color:var(--red);background:var(--red-l)}
 .chip{border:1.5px solid #CBD0D6;background:#fff;border-radius:12px;padding:13px 18px;font-size:18px;font-weight:500;color:var(--ink)}
 .chip.on{border-color:var(--pri);background:var(--pri-l);color:var(--pri-d);font-weight:700}
 .chips.err .chip{border-color:var(--red)}
+label.f small{font-size:14px}
 .nav{display:flex;justify-content:space-between;gap:16px;margin-top:26px}
 .btn{border:0;border-radius:14px;padding:18px 30px;font-size:20px;font-weight:700;min-width:180px}
 .btn.p{background:var(--pri);color:#fff} .btn.p:active{background:var(--pri-d)}
@@ -154,7 +155,7 @@ input.t.err{border-color:var(--red);background:var(--red-l)}
 <div class="app" id="app">
   <div class="offline" id="offline"></div>
   <header class="top">
-    <div class="brand" id="brand"><div class="logo">ABC</div><div><span>ABC Kochwerk</span><small id="t_site"></small></div></div>
+    <div class="brand"><div class="logo">ABC</div><div><span id="t_firma_kurz">ABC Kochwerk</span><small id="t_site"></small></div></div>
     <div class="top-r"><div class="clock" id="clock"></div>
       <div class="lang"><button data-lang="de" class="on">Deutsch</button><button data-lang="en">English</button></div>
     </div>
@@ -162,10 +163,7 @@ input.t.err{border-color:var(--red);background:var(--red-l)}
   <main>
     <!-- START -->
     <div class="screen on" id="s-start">
-      <div class="hero">
-        <h1 id="t_welcome"></h1>
-        <p class="sub" id="t_welcome_sub"></p>
-      </div>
+      <div class="hero"><h1 id="t_welcome"></h1><p class="sub" id="t_welcome_sub"></p></div>
       <div class="big-actions">
         <button class="big in" id="go-in">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
@@ -179,27 +177,18 @@ input.t.err{border-color:var(--red);background:var(--red-l)}
       <p class="hint" id="t_start_hint"></p>
     </div>
 
-    <!-- STEP 1: Kontaktdaten -->
+    <!-- STEP 1 -->
     <div class="screen" id="s-daten">
       <div class="steps"><div class="ok"></div><div></div><div></div><div></div></div>
       <div class="card">
         <h2 id="t_s1"></h2><p class="sub" id="t_s1_sub"></p>
-        <div class="grid">
-          <div><label class="f" for="f_vorname"><span id="t_vorname"></span> <em>*</em></label><input class="t" id="f_vorname" autocomplete="off" autocapitalize="words" maxlength="80"></div>
-          <div><label class="f" for="f_nachname"><span id="t_nachname"></span> <em>*</em></label><input class="t" id="f_nachname" autocomplete="off" autocapitalize="words" maxlength="80"></div>
-          <div><label class="f" for="f_firma" id="t_firma"></label><input class="t" id="f_firma" autocomplete="off" maxlength="120"></div>
-          <div><label class="f" for="f_email"><span id="t_email"></span> <em>*</em></label><input class="t" id="f_email" type="email" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="160"></div>
-          <div><label class="f" for="f_telefon" id="t_telefon"></label><input class="t" id="f_telefon" type="tel" inputmode="tel" autocomplete="off" maxlength="40"></div>
-          <div><label class="f" for="f_ansprech"><span id="t_ansprech"></span> <em>*</em></label><input class="t" id="f_ansprech" autocomplete="off" autocapitalize="words" maxlength="120" list="dl_ansprech"><datalist id="dl_ansprech"></datalist></div>
-          <div class="full"><label class="f"><span id="t_gruppe"></span> <em>*</em></label><div class="chips" id="c_gruppe"></div></div>
-          <div class="full"><label class="f"><span id="t_bereich"></span> <em>*</em></label><div class="chips" id="c_bereich"></div></div>
-        </div>
+        <div class="grid" id="felder"></div>
         <div class="msg err" id="m_daten"></div>
         <div class="nav"><button class="btn s" data-back="s-start" id="t_cancel1"></button><button class="btn p" id="next1"></button></div>
       </div>
     </div>
 
-    <!-- STEP 2: Belehrung -->
+    <!-- STEP 2 -->
     <div class="screen" id="s-belehrung">
       <div class="steps"><div class="ok"></div><div class="ok"></div><div></div><div></div></div>
       <div class="card">
@@ -212,7 +201,7 @@ input.t.err{border-color:var(--red);background:var(--red-l)}
       </div>
     </div>
 
-    <!-- STEP 3: Gesundheit -->
+    <!-- STEP 3 -->
     <div class="screen" id="s-gesundheit">
       <div class="steps"><div class="ok"></div><div class="ok"></div><div class="ok"></div><div></div></div>
       <div class="card">
@@ -228,7 +217,7 @@ input.t.err{border-color:var(--red);background:var(--red-l)}
       </div>
     </div>
 
-    <!-- STEP 4: Unterschrift -->
+    <!-- STEP 4 -->
     <div class="screen" id="s-unterschrift">
       <div class="steps"><div class="ok"></div><div class="ok"></div><div class="ok"></div><div class="ok"></div></div>
       <div class="card">
@@ -265,362 +254,218 @@ input.t.err{border-color:var(--red);background:var(--red-l)}
         <div class="nav"><button class="btn s" data-back="s-start" id="t_cancel_out"></button><span></span></div>
       </div>
     </div>
-
   </main>
 </div>
 
-<!-- Modals -->
 <div class="modal" id="mod_ds"><div class="card"><h2 id="t_ds_title"></h2><div class="bel" style="max-height:60vh" id="ds_text"></div><div class="nav"><span></span><button class="btn p" id="ds_close">OK</button></div></div></div>
 <div class="modal" id="mod_confirm"><div class="card" style="max-width:560px;text-align:center"><h2 id="conf_title"></h2><p class="sub" id="conf_text" style="margin-top:10px"></p><div class="nav"><button class="btn s" id="conf_no"></button><button class="btn p" id="conf_yes"></button></div></div></div>
 
+<script src="formular-standard.js"></script>
 <script>
-/* ================= KONFIGURATION ================= */
-const CONFIG = {
-  supabaseUrl: 'https://ywmimuctohdmxkmexops.supabase.co',
-  supabaseKey: 'sb_publishable_BDxHs8FE36DMxpiU4MPGRA_nPAr65lo',
-  standort: 'Zentrale Weyhe',
-  firma: 'ABC Kochwerk GmbH',
-  adresse: 'Gutenbergstraße 7a, 28844 Weyhe',
-  datenschutzKontakt: 'ABC Kochwerk GmbH, Datenschutz, Gutenbergstraße 7a, 28844 Weyhe',
-  kontaktLoeschenTage: 42,     // muss zu besucher_config passen
-  gesamtLoeschenJahre: 2,
-  ansprechpartnerVorschlaege: ['Produktionsleitung', 'Betriebsleitung', 'Qualitätsmanagement', 'Empfang / Verwaltung', 'Einkauf', 'Geschäftsführung'],
-  belehrungVersion: 'BEL-2026-10-v1',
+/* ================= TECHNIK ================= */
+const API = {
+  url: 'https://ywmimuctohdmxkmexops.supabase.co',
+  key: 'sb_publishable_BDxHs8FE36DMxpiU4MPGRA_nPAr65lo',
   leerlaufSekunden: 180,
 };
 
-/* ================= TEXTE ================= */
-const T = {
-de:{
-  site:'Zentrale Weyhe · Verwaltung & Großküche',
-  welcome:'Herzlich willkommen!', welcome_sub:'Bitte melden Sie sich an, bevor Sie das Gebäude betreten – und wieder ab, wenn Sie gehen.',
-  btn_in:'Anmelden', btn_in_sub:'Ich komme an', btn_out:'Abmelden', btn_out_sub:'Ich gehe',
-  start_hint:'Die Anmeldung dauert ca. 3 Minuten und enthält eine kurze Hygienebelehrung.',
-  s1:'1 · Ihre Kontaktdaten', s1_sub:'Pflichtfelder sind mit * gekennzeichnet.',
-  vorname:'Vorname', nachname:'Nachname', firma:'Firma', email:'E-Mail-Adresse', telefon:'Telefon (optional)', ansprech:'Ansprechpartner bei uns',
-  gruppe:'Ich bin hier als …', bereich:'Ich besuche …',
-  gruppen:['Besprechung / Gast','Außendienst Lieferant','Handwerker / Techniker','Lieferant / Fahrer','Bewerber/in','Sonstiges'],
-  bereiche:['Verwaltung / Büro','Küche / Produktion','Lager / Wareneingang','Mehrere Bereiche'],
-  cancel:'Abbrechen', next:'Weiter', back:'Zurück',
-  err_req:'Bitte füllen Sie alle Pflichtfelder aus.', err_mail:'Bitte prüfen Sie die E-Mail-Adresse.',
-  s2:'2 · Hygienebelehrung', s2_sub:'Kurzbelehrung für Besucher und externe Personen gemäß §§ 42, 43 IfSG und HACCP-Konzept. Bitte vollständig lesen.',
-  scroll:'Bitte bis zum Ende lesen', ck_bel:'Ich habe die Hygienebelehrung gelesen und verstanden und halte mich während meines Aufenthalts an diese Regeln.',
-  err_bel:'Bitte bestätigen Sie die Belehrung.',
+/* Feste Bedienelemente (Inhalte/Felder/Belehrung kommen aus „Formular & Texte“ in der Verwaltung) */
+const UI = {
+de:{ btn_in:'Anmelden', btn_in_sub:'Ich komme an', btn_out:'Abmelden', btn_out_sub:'Ich gehe',
+  s1:'1 · Ihre Angaben', s1_sub:'Pflichtfelder sind mit * gekennzeichnet.', cancel:'Abbrechen', next:'Weiter', back:'Zurück',
+  err_req:'Bitte füllen Sie alle Pflichtfelder aus.', err_mail:'Bitte prüfen Sie die E-Mail-Adresse.', optional:'(optional)',
+  s2:'2 · Hygienebelehrung', scroll:'Bitte bis zum Ende lesen', err_bel:'Bitte bestätigen Sie die Belehrung.',
   s3:'3 · Erklärung zur Gesundheit', s3_sub:'Gemäß § 42 Infektionsschutzgesetz (IfSG).',
-  gz:`<p>Personen dürfen Küchen- und Produktionsbereiche <b>nicht</b> betreten, wenn sie</p><ul>
-  <li>an Typhus, Paratyphus, Cholera, Shigellenruhr, Salmonellose, einer anderen infektiösen Gastroenteritis (Magen-Darm-Infektion, z.&nbsp;B. Noro- oder Rotaviren) oder an Virushepatitis A oder E erkrankt sind oder ein Verdacht darauf besteht,</li>
-  <li>an infizierten Wunden oder Hautkrankheiten leiden, bei denen Krankheitserreger über Lebensmittel übertragen werden können,</li>
-  <li>Shigellen, Salmonellen, enterohämorrhagische E.&nbsp;coli (EHEC) oder Choleravibrionen ausscheiden.</li></ul>
-  <p>Typische Anzeichen sind: <b>Durchfall, Erbrechen, Übelkeit, Fieber, Bauchkrämpfe, Gelbfärbung von Haut oder Augen, eitrige oder nässende Wunden.</b></p>
-  <p>Ihre Angaben zu Krankheiten werden <b>nicht</b> gespeichert – gespeichert wird nur, ob Sie die Erklärung abgegeben haben.</p>`,
-  hz_yes:'Ich bestätige', hz_yes_sub:'Mir sind keine dieser Hinderungsgründe bekannt.',
-  hz_no:'Ich kann das nicht bestätigen', hz_no_sub:'Ich habe Beschwerden oder bin unsicher.',
-  hz_warn:'Kein Problem – Sie können sich trotzdem anmelden. <b>Bitte betreten Sie keine Küchen-, Produktions- oder Lagerbereiche</b> und informieren Sie Ihren Ansprechpartner.',
+  hz_yes:'Ich bestätige', hz_yes_sub:'Mir sind keine dieser Hinderungsgründe bekannt.', hz_no:'Ich kann das nicht bestätigen', hz_no_sub:'Ich habe Beschwerden oder bin unsicher.',
   err_hz:'Bitte wählen Sie eine Antwort.',
   s4:'4 · Unterschrift', s4_sub:'Mit Ihrer Unterschrift bestätigen Sie die Hygienebelehrung und Ihre Erklärung.',
   sig_ph:'Hier mit dem Finger unterschreiben', sig_info:'Unterschrift', sig_clear:'Löschen',
   ck_ds:'Ich habe den Datenschutzhinweis zur Kenntnis genommen.', open_ds:'Datenschutzhinweis lesen',
-  err_sig:'Bitte unterschreiben Sie im Feld.', err_ds:'Bitte bestätigen Sie den Datenschutzhinweis.',
-  submit:'Verbindlich anmelden', sending:'Wird gespeichert …',
-  sum_name:'Name', sum_firma:'Firma', sum_mail:'E-Mail', sum_ansprech:'Ansprechpartner', sum_bel:'Belehrung', sum_gz:'Gesundheit', sum_ok:'bestätigt', sum_nok:'nicht bestätigt – kein Zutritt Küche/Produktion',
+  err_sig:'Bitte unterschreiben Sie im Feld.', err_ds:'Bitte bestätigen Sie den Datenschutzhinweis.', submit:'Verbindlich anmelden', sending:'Wird gespeichert …',
+  sum_name:'Name', sum_bel:'Belehrung', sum_gz:'Gesundheit', sum_ok:'bestätigt', sum_nok:'nicht bestätigt – kein Zutritt Küche/Produktion',
   done_title:n=>`Willkommen, ${n}!`, done_time:t=>`Angemeldet um ${t} Uhr`,
-  done_text:'Bitte melden Sie sich hier wieder ab, wenn Sie das Gebäude verlassen.',
   done_notice:'Bitte betreten Sie keine Küchen-, Produktions- oder Lagerbereiche und informieren Sie Ihren Ansprechpartner.',
   cd:s=>`Zurück zum Start in ${s} s`,
-  out:'Abmelden', out_sub:'Bitte geben Sie Ihren Vor- oder Nachnamen ein (mind. 2 Buchstaben).',
-  out_ph:'Name eingeben …', out_none:'Kein angemeldeter Besuch gefunden. Bitte prüfen Sie die Schreibweise oder wenden Sie sich an den Empfang.',
-  out_btn:'Abmelden', since:t=>`seit ${t} Uhr`,
-  conf_title:n=>`${n} abmelden?`, conf_text:'Sie werden jetzt als „gegangen“ eingetragen.', yes:'Ja, abmelden', no:'Abbrechen',
-  out_done:n=>`Auf Wiedersehen, ${n}!`, out_done_time:t=>`Abgemeldet um ${t} Uhr`, out_done_text:'Vielen Dank für Ihren Besuch und gute Fahrt.',
+  out:'Abmelden', out_sub:'Bitte geben Sie Ihren Vor- oder Nachnamen ein (mind. 2 Buchstaben).', out_ph:'Name eingeben …',
+  out_none:'Kein angemeldeter Besuch gefunden. Bitte prüfen Sie die Schreibweise oder wenden Sie sich an den Empfang.',
+  out_btn:'Abmelden', since:t=>`seit ${t} Uhr`, conf_title:n=>`${n} abmelden?`, conf_text:'Sie werden jetzt als „gegangen“ eingetragen.', yes:'Ja, abmelden', no:'Abbrechen',
+  out_done:n=>`Auf Wiedersehen, ${n}!`, out_done_time:t=>`Abgemeldet um ${t} Uhr`,
   offline:'Keine Internetverbindung – Anmeldung gerade nicht möglich. Bitte am Empfang melden.',
-  err_net:'Speichern fehlgeschlagen. Bitte erneut versuchen oder am Empfang melden.',
-  ds_title:'Datenschutzhinweis (Art. 13 DSGVO)',
-},
-en:{
-  site:'Head office Weyhe · Administration & central kitchen',
-  welcome:'Welcome!', welcome_sub:'Please sign in before entering the building – and sign out when you leave.',
-  btn_in:'Sign in', btn_in_sub:'I am arriving', btn_out:'Sign out', btn_out_sub:'I am leaving',
-  start_hint:'Signing in takes about 3 minutes and includes a short hygiene briefing.',
-  s1:'1 · Your contact details', s1_sub:'Required fields are marked with *.',
-  vorname:'First name', nachname:'Last name', firma:'Company', email:'Email address', telefon:'Phone (optional)', ansprech:'Contact person here',
-  gruppe:'I am here as …', bereich:'I am visiting …',
-  gruppen:['Meeting / guest','Supplier sales rep','Tradesperson / technician','Supplier / driver','Job applicant','Other'],
-  bereiche:['Administration / office','Kitchen / production','Storage / goods receipt','Several areas'],
-  cancel:'Cancel', next:'Next', back:'Back',
-  err_req:'Please complete all required fields.', err_mail:'Please check the email address.',
-  s2:'2 · Hygiene briefing', s2_sub:'Short briefing for visitors and external persons according to §§ 42, 43 German Infection Protection Act (IfSG) and our HACCP concept. Please read it completely.',
-  scroll:'Please read to the end', ck_bel:'I have read and understood the hygiene briefing and will follow these rules during my visit.',
-  err_bel:'Please confirm the briefing.',
+  err_net:'Speichern fehlgeschlagen. Bitte erneut versuchen oder am Empfang melden.', ds_title:'Datenschutzhinweis (Art. 13 DSGVO)' },
+en:{ btn_in:'Sign in', btn_in_sub:'I am arriving', btn_out:'Sign out', btn_out_sub:'I am leaving',
+  s1:'1 · Your details', s1_sub:'Required fields are marked with *.', cancel:'Cancel', next:'Next', back:'Back',
+  err_req:'Please complete all required fields.', err_mail:'Please check the email address.', optional:'(optional)',
+  s2:'2 · Hygiene briefing', scroll:'Please read to the end', err_bel:'Please confirm the briefing.',
   s3:'3 · Health declaration', s3_sub:'According to § 42 German Infection Protection Act (IfSG).',
-  gz:`<p>Persons must <b>not</b> enter kitchen and production areas if they</p><ul>
-  <li>suffer from, or are suspected of having, typhoid, paratyphoid, cholera, shigellosis, salmonellosis, another infectious gastroenteritis (e.g. noro- or rotavirus) or viral hepatitis A or E,</li>
-  <li>have infected wounds or skin diseases through which pathogens can be transmitted via food,</li>
-  <li>excrete shigella, salmonella, enterohaemorrhagic E. coli (EHEC) or cholera vibrios.</li></ul>
-  <p>Typical symptoms: <b>diarrhoea, vomiting, nausea, fever, abdominal cramps, yellowing of skin or eyes, festering or weeping wounds.</b></p>
-  <p>Information about illnesses is <b>not</b> stored – we only record whether you made the declaration.</p>`,
-  hz_yes:'I confirm', hz_yes_sub:'None of these reasons apply to me.',
-  hz_no:'I cannot confirm this', hz_no_sub:'I have symptoms or I am unsure.',
-  hz_warn:'No problem – you can still sign in. <b>Please do not enter any kitchen, production or storage areas</b> and inform your contact person.',
+  hz_yes:'I confirm', hz_yes_sub:'None of these reasons apply to me.', hz_no:'I cannot confirm this', hz_no_sub:'I have symptoms or I am unsure.',
   err_hz:'Please choose an answer.',
   s4:'4 · Signature', s4_sub:'With your signature you confirm the hygiene briefing and your declaration.',
   sig_ph:'Sign here with your finger', sig_info:'Signature', sig_clear:'Clear',
   ck_ds:'I have taken note of the privacy notice.', open_ds:'Read privacy notice',
-  err_sig:'Please sign in the box.', err_ds:'Please confirm the privacy notice.',
-  submit:'Sign in now', sending:'Saving …',
-  sum_name:'Name', sum_firma:'Company', sum_mail:'Email', sum_ansprech:'Contact person', sum_bel:'Briefing', sum_gz:'Health', sum_ok:'confirmed', sum_nok:'not confirmed – no access to kitchen/production',
+  err_sig:'Please sign in the box.', err_ds:'Please confirm the privacy notice.', submit:'Sign in now', sending:'Saving …',
+  sum_name:'Name', sum_bel:'Briefing', sum_gz:'Health', sum_ok:'confirmed', sum_nok:'not confirmed – no access to kitchen/production',
   done_title:n=>`Welcome, ${n}!`, done_time:t=>`Signed in at ${t}`,
-  done_text:'Please sign out here when you leave the building.',
   done_notice:'Please do not enter any kitchen, production or storage areas and inform your contact person.',
   cd:s=>`Back to start in ${s} s`,
-  out:'Sign out', out_sub:'Please enter your first or last name (at least 2 letters).',
-  out_ph:'Enter name …', out_none:'No signed-in visit found. Please check the spelling or ask at reception.',
-  out_btn:'Sign out', since:t=>`since ${t}`,
-  conf_title:n=>`Sign out ${n}?`, conf_text:'You will now be registered as “left”.', yes:'Yes, sign out', no:'Cancel',
-  out_done:n=>`Goodbye, ${n}!`, out_done_time:t=>`Signed out at ${t}`, out_done_text:'Thank you for your visit and have a safe trip.',
+  out:'Sign out', out_sub:'Please enter your first or last name (at least 2 letters).', out_ph:'Enter name …',
+  out_none:'No signed-in visit found. Please check the spelling or ask at reception.',
+  out_btn:'Sign out', since:t=>`since ${t}`, conf_title:n=>`Sign out ${n}?`, conf_text:'You will now be registered as “left”.', yes:'Yes, sign out', no:'Cancel',
+  out_done:n=>`Goodbye, ${n}!`, out_done_time:t=>`Signed out at ${t}`,
   offline:'No internet connection – signing in is not possible right now. Please report to reception.',
-  err_net:'Saving failed. Please try again or report to reception.',
-  ds_title:'Privacy notice (Art. 13 GDPR)',
-}};
-
-/* Belehrung: Quelle HACCP-Konzept ABC Gruppe (Besuch in der Küche/Produktion, Personal-/Küchenhygiene),
-   Arbeitsanweisung 021 + Merkblatt „Hygienerichtlinien – Schriftliche Kurzbelehrung“ (Kapitel 07),
-   Rundmail QM „Betriebsfremde Personen“ (28.10.2026). */
-const BEL = {
-de:[
- {i:'1',h:'Warum diese Belehrung?',p:[
-  'Sie betreten einen Betrieb, in dem täglich Speisen für Kitas, Schulen und Einrichtungen der Gemeinschaftsverpflegung hergestellt werden. Wir sind an strenge Hygieneregeln gebunden, die für jede Person gelten, die sich in unseren Räumen aufhält – auch in der Verwaltung.',
-  'Jeder Mensch trägt Keime auf sich. Darunter können Krankheitserreger sein, die über Hände, Husten, Niesen, Kleidung, Werkzeug oder Gegenstände auf Lebensmittel und Arbeitsflächen gelangen und die Gesundheit unserer Gäste gefährden.',
-  'Grundlagen: Verordnung (EG) Nr. 852/2004 über Lebensmittelhygiene, §§ 42 und 43 Infektionsschutzgesetz (IfSG) sowie das HACCP-Konzept der ABC Kochwerk GmbH (Arbeitsanweisung 021 „Schriftliche Kurzbelehrung“).']},
- {i:'2',h:'Anmeldung und Zutritt',l:[
-  'Melden Sie sich bei Ihrem Ansprechpartner bzw. bei Produktionsleitung, Betriebsleitung oder Qualitätsmanagement an.',
-  'Küche, Produktion und Lager betreten Sie nur nach Aufforderung, in Begleitung und mit der bereitgestellten Schutzkleidung (Kittel, Haarschutz, ggf. Überschuhe). Ohne Schutzkleidung ist der Zutritt zum Hygienebereich untersagt.',
-  'Die Küche ist der Kompetenzbereich des Küchenpersonals – bitte folgen Sie dessen Anweisungen.',
-  'Lieferanten, Fahrer und Paketdienste: Die Annahme erfolgt ausschließlich über den Wareneingang – nicht über die Auslieferung/den Warenausgang oder den Personaleingang. Der Wareneingang darf nicht weiter als bis zum ersten Schnelllauftor betreten werden.',
-  'Halten Sie die vorgegebenen Personal- und Warenwege ein.']},
- {i:'3',h:'Verhalten im Betrieb',l:[
-  'Berühren Sie keine Lebensmittel, Arbeitsflächen, Geräte oder Geschirr, wenn Sie nicht ausdrücklich dazu aufgefordert sind.',
-  'Waschen und desinfizieren Sie Ihre Hände vor dem Betreten der Küche und nach jedem Toilettenbesuch. Fragen Sie unsere Mitarbeitenden nach dem nächsten Handwaschbecken.',
-  'In Küche und Produktion ist Rauchen, Essen, Trinken und Kaugummikauen verboten. Rauchen nur in den ausgewiesenen Bereichen.',
-  'Legen Sie Hand- und Armschmuck sowie Armbanduhren vor dem Betreten der Produktion ab.',
-  'Husten oder niesen Sie nicht in Richtung von Lebensmitteln – nutzen Sie die Armbeuge.',
-  'Legen Sie keine privaten Gegenstände (Taschen, Handy, Getränke, Medikamente) in Küche oder Produktion ab. Keine Gegenstände aus Glas oder Holz mitbringen.']},
- {i:'4',h:'Zusätzlich für Handwerker, Techniker und Aushilfen',l:[
-  'Tragen Sie nur die vereinbarte, saubere Schutz- bzw. Arbeitskleidung.',
-  'Waschen Sie Ihre Hände vor Arbeitsbeginn, nach jeder Pause (Essen, Rauchen, Toilette) und nach Reinigungs- oder Schmutzarbeiten.',
-  'Decken Sie Schnittwunden mit einem wasserdichten Pflaster ab. Arbeiten Sie nicht mit entzündeten Wunden.',
-  'Werkzeug und Material nie auf Lebensmitteln oder Arbeitsflächen für Lebensmittel ablegen. Lebensmittel vor Staub, Spänen und Fremdkörpern schützen.',
-  'Übergeben Sie den Arbeitsbereich sauber und frei von Fremdkörpern (Schrauben, Späne, Splitter) und melden Sie das Ende der Arbeiten dem Küchenpersonal.']},
- {i:'5',h:'Gesundheit (§ 42 IfSG)',p:[
-  'Kranke oder erkältete Personen und Personen mit Magen-Darm-Beschwerden dürfen Küchen- und Produktionsräume nicht betreten. Dazu gehören insbesondere: Durchfall, Erbrechen, Fieber, Hautausschläge, infizierte Wunden oder eine Lebensmittelinfektion.',
-  'Bitte melden Sie es Ihrem Ansprechpartner, wenn Sie in den letzten Wochen an einer Magen-Darm-Infektion (z. B. Salmonellen), starkem wässrigem oder blutigem Durchfall, einer Leberentzündung (mit oder ohne Gelbsucht) oder einer schweren Lebensmittelinfektion (z. B. Typhus, Paratyphus, Cholera) erkrankt waren – auch wenn Sie inzwischen beschwerdefrei sind.']},
- {i:'!',h:'Bei Verstößen',p:[
-  'Wer gegen diese Regeln verstößt, wird des Betriebes verwiesen. Produktionsleitung, Betriebsleitung oder Qualitätsmanagement entscheiden über das weitere Vorgehen.',
-  'Das Einhalten der Hygieneregeln ist aktiver Verbraucherschutz. Vielen Dank für Ihr Verständnis!']},
-],
-en:[
- {i:'1',h:'Why this briefing?',p:[
-  'You are entering a company that prepares meals every day for nurseries, schools and other institutions. We are bound by strict hygiene rules that apply to everyone on our premises – including the administration area.',
-  'Everybody carries germs. These can include pathogens that are transferred to food and work surfaces via hands, coughing, sneezing, clothing, tools or objects and endanger the health of our guests.',
-  'Legal basis: Regulation (EC) No 852/2004 on the hygiene of foodstuffs, §§ 42 and 43 German Infection Protection Act (IfSG) and the HACCP concept of ABC Kochwerk GmbH (work instruction 021 “Written short briefing”).']},
- {i:'2',h:'Registration and access',l:[
-  'Report to your contact person or to production management, operations management or quality management.',
-  'Enter kitchen, production and storage areas only when asked, accompanied and wearing the protective clothing provided (coat, hair cover, overshoes if required). Access to hygiene areas without protective clothing is prohibited.',
-  'The kitchen is the domain of the kitchen staff – please follow their instructions.',
-  'Suppliers, drivers and parcel services: deliveries are accepted only at goods receipt – not at dispatch/goods issue or the staff entrance. Do not go further into goods receipt than the first high-speed door.',
-  'Keep to the designated routes for staff and goods.']},
- {i:'3',h:'Conduct on the premises',l:[
-  'Do not touch food, work surfaces, equipment or dishes unless explicitly asked to.',
-  'Wash and disinfect your hands before entering the kitchen and after every visit to the toilet. Ask our staff for the nearest hand-wash basin.',
-  'Smoking, eating, drinking and chewing gum are prohibited in kitchen and production areas. Smoking only in designated areas.',
-  'Remove hand and arm jewellery and wristwatches before entering production.',
-  'Do not cough or sneeze towards food – use the crook of your arm.',
-  'Do not put down private items (bags, phone, drinks, medicines) in kitchen or production. Do not bring items made of glass or wood.']},
- {i:'4',h:'Additionally for tradespeople, technicians and temporary staff',l:[
-  'Wear only the agreed, clean protective or work clothing.',
-  'Wash your hands before starting work, after every break (eating, smoking, toilet) and after cleaning or dirty work.',
-  'Cover cuts with a waterproof plaster. Do not work with inflamed wounds.',
-  'Never put tools or material on food or food-contact surfaces. Protect food from dust, shavings and foreign bodies.',
-  'Hand over the work area clean and free of foreign bodies (screws, shavings, splinters) and inform the kitchen staff when work is finished.']},
- {i:'5',h:'Health (§ 42 IfSG)',p:[
-  'Sick persons, persons with a cold and persons with gastrointestinal complaints must not enter kitchen and production rooms. This includes in particular: diarrhoea, vomiting, fever, skin rashes, infected wounds or food poisoning.',
-  'Please inform your contact person if in recent weeks you have had a gastrointestinal infection (e.g. salmonella), severe watery or bloody diarrhoea, hepatitis (with or without jaundice) or a severe food infection (e.g. typhoid, paratyphoid, cholera) – even if you no longer have symptoms.']},
- {i:'!',h:'Violations',p:[
-  'Anyone violating these rules will be asked to leave the premises. Production management, operations management or quality management decide on further action.',
-  'Following hygiene rules is active consumer protection. Thank you for your understanding!']},
-]};
-
-const DS = {
-de:()=>`<p><b>Verantwortlich:</b> ${CONFIG.firma}, ${CONFIG.adresse}.</p>
-<p><b>Kontakt Datenschutz:</b> ${CONFIG.datenschutzKontakt}.</p>
-<p><b>Zweck:</b> Nachweis der Hygienebelehrung betriebsfremder Personen (VO (EG) Nr. 852/2004, HACCP-Konzept, § 42/43 IfSG), Übersicht über anwesende Personen für Sicherheit und Evakuierung sowie Wahrnehmung des Hausrechts.</p>
-<p><b>Rechtsgrundlage:</b> Art. 6 Abs. 1 lit. c DSGVO (rechtliche Pflicht zur Lebensmittelhygiene) und Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an Betriebssicherheit und Nachweisführung).</p>
-<p><b>Daten:</b> Name, Firma, E-Mail-Adresse, Telefon (freiwillig), Ansprechpartner, Besuchsgrund und -bereich, Uhrzeit von An- und Abmeldung, Unterschrift, Bestätigung der Belehrung und der Gesundheitserklärung (nur ja/nein, keine Angaben zu Krankheiten).</p>
-<p><b>Speicherdauer:</b> E-Mail-Adresse und Telefonnummer werden nach ${CONFIG.kontaktLoeschenTage} Tagen gelöscht, alle übrigen Angaben einschließlich Unterschrift nach ${CONFIG.gesamtLoeschenJahre} Jahren.</p>
-<p><b>Empfänger:</b> Nur berechtigte Mitarbeitende (Empfang, Qualitätsmanagement, Betriebs- und Produktionsleitung). Technischer Dienstleister ist Supabase (Server in der EU, Frankfurt am Main) als Auftragsverarbeiter. Eine Weitergabe an Dritte erfolgt nur, wenn Behörden (z. B. Lebensmittelüberwachung, Gesundheitsamt) dies verlangen.</p>
-<p><b>Ihre Rechte:</b> Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung und Widerspruch (Art. 15–21 DSGVO) sowie Beschwerde bei einer Datenschutz-Aufsichtsbehörde, z. B. der Landesbeauftragten für den Datenschutz Niedersachsen.</p>
-<p>Ohne die Pflichtangaben ist ein Aufenthalt im Betrieb nicht möglich.</p>`,
-en:()=>`<p><b>Controller:</b> ${CONFIG.firma}, ${CONFIG.adresse}, Germany.</p>
-<p><b>Data protection contact:</b> ${CONFIG.datenschutzKontakt}.</p>
-<p><b>Purpose:</b> proof of the hygiene briefing of external persons (Regulation (EC) No 852/2004, HACCP concept, § 42/43 IfSG), overview of persons present for safety and evacuation, and exercise of domiciliary rights.</p>
-<p><b>Legal basis:</b> Art. 6(1)(c) GDPR (legal obligation regarding food hygiene) and Art. 6(1)(f) GDPR (legitimate interest in operational safety and documentation).</p>
-<p><b>Data:</b> name, company, email address, phone (optional), contact person, purpose and area of visit, sign-in and sign-out time, signature, confirmation of briefing and health declaration (yes/no only, no details about illnesses).</p>
-<p><b>Retention:</b> email address and phone number are deleted after ${CONFIG.kontaktLoeschenTage} days, all other data including the signature after ${CONFIG.gesamtLoeschenJahre} years.</p>
-<p><b>Recipients:</b> authorised staff only (reception, quality management, operations and production management). Technical service provider is Supabase (servers in the EU, Frankfurt) as processor. Data is passed on to third parties only if required by authorities (e.g. food control, public health office).</p>
-<p><b>Your rights:</b> access, rectification, erasure, restriction and objection (Art. 15–21 GDPR) and the right to lodge a complaint with a supervisory authority, e.g. the Data Protection Commissioner of Lower Saxony.</p>
-<p>A stay on the premises is not possible without the required information.</p>`};
+  err_net:'Saving failed. Please try again or report to reception.', ds_title:'Privacy notice (Art. 13 GDPR)' }};
 
 /* ================= HILFSFUNKTIONEN ================= */
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-let lang = 'de';
-const t = k => T[lang][k];
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const hhmm = d => new Date(d).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Berlin'});
-const dt = d => d ? new Date(d).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Europe/Berlin'}) : '';
-const todayISO = () => new Date().toLocaleDateString('sv-SE',{timeZone:'Europe/Berlin'});
-
-async function rpc(fn, args){
-  const r = await fetch(`${CONFIG.supabaseUrl}/rest/v1/rpc/${fn}`, {
-    method:'POST',
-    headers:{'Content-Type':'application/json','apikey':CONFIG.supabaseKey,'Authorization':`Bearer ${CONFIG.supabaseKey}`},
-    body: JSON.stringify(args||{})
-  });
-  const txt = await r.text();
-  let data = null; try{ data = txt ? JSON.parse(txt) : null }catch(e){ data = txt }
-  if(!r.ok){ const e = new Error((data && data.message) || ('HTTP '+r.status)); e.server = true; throw e; }
-  return data;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let lang='de';
+const u=k=>UI[lang][k];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hhmm=d=>new Date(d).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Berlin'});
+const clone=o=>JSON.parse(JSON.stringify(o));
+async function rpc(fn,args){
+  const r=await fetch(`${API.url}/rest/v1/rpc/${fn}`,{method:'POST',headers:{'Content-Type':'application/json',apikey:API.key,Authorization:`Bearer ${API.key}`},body:JSON.stringify(args||{})});
+  const txt=await r.text(); let d=null; try{d=txt?JSON.parse(txt):null}catch(e){d=txt}
+  if(!r.ok){ const e=new Error((d&&d.message)||('HTTP '+r.status)); e.server=true; throw e; }
+  return d;
 }
-
 function show(id){
-  $$('.screen').forEach(s=>s.classList.toggle('on', s.id===id));
-  window.scrollTo(0,0);
-  if(id==='s-unterschrift') setTimeout(sizeSig, 30);
-  if(id==='s-belehrung') setTimeout(checkScrolled, 50);
-  if(id==='s-out') setTimeout(()=>$('#f_suche').focus(), 150);
+  $$('.screen').forEach(s=>s.classList.toggle('on',s.id===id)); window.scrollTo(0,0);
+  if(id==='s-unterschrift') setTimeout(sizeSig,30);
+  if(id==='s-belehrung') setTimeout(checkScrolled,50);
+  if(id==='s-out') setTimeout(()=>$('#f_suche').focus(),150);
 }
-function msg(id, text, cls){ const m=$(id); m.innerHTML=text||''; m.classList.toggle('on', !!text); if(cls){m.className='msg '+cls+(text?' on':'')} }
+function msg(id,text,cls){ const m=$(id); m.innerHTML=text||''; if(cls) m.className='msg '+cls; m.classList.toggle('on',!!text); }
+
+/* ================= FORMULAR-KONFIGURATION ================= */
+let F=clone(window.FORMULAR_STANDARD), F_ts=0;
+const L=o=>(o&&(o[lang]||o.de))||'';
+const tx=k=>L((F.texte||{})[k])||L(FORMULAR_STANDARD.texte[k]);
+const vars=()=>({firma:F.stammdaten?.firma||'',adresse:F.stammdaten?.adresse||'',kontakt:F.stammdaten?.datenschutzKontakt||''});
+const felder=()=>(F.felder||[]).filter(f=>f.aktiv!==false);
+async function loadForm(){
+  try{ const c=await rpc('besucher_formular_laden'); if(c&&Array.isArray(c.felder)){ F=c; try{localStorage.setItem('bes_formular',JSON.stringify(c))}catch(e){} } }
+  catch(e){ try{ const c=JSON.parse(localStorage.getItem('bes_formular')||'null'); if(c&&c.felder) F=c; }catch(_){} }
+  F_ts=Date.now();
+}
 
 /* ================= STATE ================= */
 let S;
 function resetState(){
-  S = {gruppe:null, bereich:null, belOk:false, gz:null, ds:false, sigDirty:false, sigLen:0};
-  ['#f_vorname','#f_nachname','#f_firma','#f_email','#f_telefon','#f_ansprech','#f_suche'].forEach(s=>{$(s).value='';$(s).classList.remove('err')});
+  S={vals:{}, belOk:false, gz:null, ds:false, sigDirty:false, sigLen:0};
+  $('#f_suche').value='';
   $$('.msg').forEach(m=>m.classList.remove('on'));
-  $('#ck_bel').classList.remove('on'); $('#ck_bel').classList.add('dis'); $('#next2').disabled = true;
-  $('#ck_ds').classList.remove('on');
-  $('#hz_yes').classList.remove('on'); $('#hz_no').classList.remove('on');
-  $('#results').innerHTML='';
-  $('#bel').scrollTop = 0;
-  clearSig();
-  renderChips();
+  $('#ck_bel').classList.remove('on'); $('#ck_bel').classList.add('dis'); $('#next2').disabled=true;
+  $('#ck_ds').classList.remove('on'); $('#hz_yes').classList.remove('on'); $('#hz_no').classList.remove('on');
+  $('#results').innerHTML=''; $('#bel').scrollTop=0;
+  clearSig(); renderFelder();
 }
 
-/* ================= SPRACHE ================= */
+/* ================= SPRACHE / TEXTE ================= */
 function applyLang(){
-  document.documentElement.lang = lang;
-  $$('.lang button').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
-  const map = {t_site:'site',t_welcome:'welcome',t_welcome_sub:'welcome_sub',t_btn_in:'btn_in',t_btn_in_sub:'btn_in_sub',t_btn_out:'btn_out',t_btn_out_sub:'btn_out_sub',t_start_hint:'start_hint',
-   t_s1:'s1',t_s1_sub:'s1_sub',t_vorname:'vorname',t_nachname:'nachname',t_firma:'firma',t_email:'email',t_telefon:'telefon',t_ansprech:'ansprech',t_gruppe:'gruppe',t_bereich:'bereich',
-   t_cancel1:'cancel',next1:'next',t_s2:'s2',t_s2_sub:'s2_sub',t_scroll:'scroll',t_ck_bel:'ck_bel',t_back2:'back',next2:'next',
-   t_s3:'s3',t_s3_sub:'s3_sub',t_hz_yes:'hz_yes',t_hz_yes_sub:'hz_yes_sub',t_hz_no:'hz_no',t_hz_no_sub:'hz_no_sub',t_back3:'back',next3:'next',
-   t_s4:'s4',t_s4_sub:'s4_sub',t_sig_ph:'sig_ph',t_sig_info:'sig_info',sig_clear:'sig_clear',t_ck_ds:'ck_ds',open_ds:'open_ds',t_back4:'back',submit:'submit',
-   t_out:'out',t_out_sub:'out_sub',t_cancel_out:'cancel',t_ds_title:'ds_title'};
-  for(const [id,k] of Object.entries(map)){ const el=document.getElementById(id); if(el) el.textContent = t(k); }
-  $('#gz_text').innerHTML = t('gz');
-  $('#f_suche').placeholder = t('out_ph');
-  $('#offline').textContent = t('offline');
-  $('#ds_text').innerHTML = DS[lang]();
-  renderBel(); renderChips();
-  if(S && S.gz===false) msg('#m_hz_warn', t('hz_warn'), 'warn');
+  document.documentElement.lang=lang;
+  $$('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+  const ui={t_btn_in:'btn_in',t_btn_in_sub:'btn_in_sub',t_btn_out:'btn_out',t_btn_out_sub:'btn_out_sub',t_s1:'s1',t_s1_sub:'s1_sub',t_cancel1:'cancel',next1:'next',
+    t_s2:'s2',t_scroll:'scroll',t_back2:'back',next2:'next',t_s3:'s3',t_s3_sub:'s3_sub',t_hz_yes:'hz_yes',t_hz_yes_sub:'hz_yes_sub',t_hz_no:'hz_no',t_hz_no_sub:'hz_no_sub',
+    t_back3:'back',next3:'next',t_s4:'s4',t_s4_sub:'s4_sub',t_sig_ph:'sig_ph',t_sig_info:'sig_info',sig_clear:'sig_clear',t_ck_ds:'ck_ds',open_ds:'open_ds',t_back4:'back',submit:'submit',
+    t_out:'out',t_out_sub:'out_sub',t_cancel_out:'cancel',t_ds_title:'ds_title'};
+  for(const [id,k] of Object.entries(ui)){ const el=document.getElementById(id); if(el) el.textContent=u(k); }
+  const cf={t_site:'site',t_welcome:'welcome',t_welcome_sub:'welcome_sub',t_start_hint:'start_hint',t_s2_sub:'s2_sub',t_ck_bel:'ck_bel'};
+  for(const [id,k] of Object.entries(cf)) document.getElementById(id).textContent=tx(k);
+  $('#t_firma_kurz').textContent=(F.stammdaten?.firma||'ABC Kochwerk').replace(/\s+GmbH$/,'');
+  $('#gz_text').innerHTML=formText(L(F.gesundheit?.text));
+  $('#f_suche').placeholder=u('out_ph'); $('#offline').textContent=u('offline');
+  $('#ds_text').innerHTML=formText(L(F.datenschutz),vars());
+  renderBel(); renderFelder();
+  if(S && S.gz===false) msg('#m_hz_warn',formText(L(F.gesundheit?.warnung)),'warn');
   if($('#s-unterschrift').classList.contains('on')) renderSummary();
 }
 $$('.lang button').forEach(b=>b.onclick=()=>{ lang=b.dataset.lang; applyLang(); });
 
-function renderChips(){
-  const g=$('#c_gruppe'), b=$('#c_bereich');
-  g.innerHTML = T[lang].gruppen.map((x,i)=>`<button class="chip ${S&&S.gruppe===i?'on':''}" data-i="${i}">${esc(x)}</button>`).join('');
-  b.innerHTML = T[lang].bereiche.map((x,i)=>`<button class="chip ${S&&S.bereich===i?'on':''}" data-i="${i}">${esc(x)}</button>`).join('');
-  g.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{S.gruppe=+c.dataset.i; g.classList.remove('err'); msg('#m_daten',''); renderChips();});
-  b.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{S.bereich=+c.dataset.i; b.classList.remove('err'); msg('#m_daten',''); renderChips();});
+/* ================= SCHRITT 1: dynamische Felder ================= */
+function renderFelder(){
+  if(!S) return;
+  const g=$('#felder');
+  g.innerHTML=felder().map(f=>{
+    const req=f.pflicht?' <em>*</em>':` <small style="color:var(--ink2);font-weight:500">${esc(u('optional'))}</small>`;
+    if(f.typ==='auswahl'){
+      return `<div class="full"><label class="f">${esc(L(f.label))}${req}</label><div class="chips" data-key="${esc(f.key)}">`+
+        (f.optionen||[]).map((o,i)=>`<button class="chip ${S.vals[f.key]===i?'on':''}" data-i="${i}">${esc(L(o))}</button>`).join('')+`</div></div>`;
+    }
+    const type=f.typ==='email'?'email':f.typ==='tel'?'tel':'text';
+    const extra=f.typ==='email'?'inputmode="email" autocapitalize="off" spellcheck="false"':f.typ==='tel'?'inputmode="tel"':'autocapitalize="words"';
+    const dl=(f.optionen&&f.optionen.length)?`list="dl_${esc(f.key)}"`:'';
+    return `<div class="${f.breite==='voll'?'full':''}"><label class="f" for="fld_${esc(f.key)}">${esc(L(f.label))}${req}</label>
+      <input class="t" id="fld_${esc(f.key)}" data-key="${esc(f.key)}" type="${type}" ${extra} ${dl} autocomplete="off" maxlength="160" value="${esc(S.vals[f.key]??'')}">
+      ${dl?`<datalist id="dl_${esc(f.key)}">${f.optionen.map(o=>`<option value="${esc(L(o))}">`).join('')}</datalist>`:''}</div>`;
+  }).join('');
+  g.querySelectorAll('input[data-key]').forEach(i=>i.addEventListener('input',()=>{ S.vals[i.dataset.key]=i.value; i.classList.remove('err'); msg('#m_daten',''); }));
+  g.querySelectorAll('.chips').forEach(c=>c.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{ S.vals[c.dataset.key]=+b.dataset.i; msg('#m_daten',''); renderFelder(); }));
 }
-function belPlain(l){
-  return `Hygienebelehrung ${CONFIG.firma} – ${CONFIG.standort} (${CONFIG.belehrungVersion}, ${l.toUpperCase()})\n\n` +
-    BEL[l].map(s=>`${s.i==='!'?'':s.i+'. '}${s.h}\n`+(s.p||[]).join('\n')+(s.l||[]).map(x=>'• '+x).join('\n')).join('\n\n') +
-    `\n\n${T[l].s3}\n` + T[l].gz.replace(/<li>/g,'• ').replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ').replace(/\n\s*/g,'\n').trim() +
-    `\n\nErklärung / Declaration:\n${T[l].ck_bel}`;
+function wert(f){ // Wert für Speicherung (Auswahl immer als deutscher Text)
+  const v=S.vals[f.key];
+  if(f.typ==='auswahl') return (v===undefined||v===null)?'':((f.optionen||[])[v]?.de||'');
+  return String(v??'').trim();
 }
-function renderBel(){
-  $('#bel').innerHTML = BEL[lang].map(s=>`<section><h3><i>${s.i}</i>${esc(s.h)}</h3>`+
-    (s.p||[]).map(p=>`<p>${esc(p)}</p>`).join('')+
-    (s.l?`<ul>${s.l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'')+`</section>`).join('');
-}
-
-/* ================= SCHRITT 1 ================= */
+function wertAnzeige(f){ const v=S.vals[f.key]; return f.typ==='auswahl'?L((f.optionen||[])[v]):String(v??'').trim(); }
 $('#go-in').onclick=()=>{ resetState(); show('s-daten'); goFullscreen(); };
 $('#go-out').onclick=()=>{ resetState(); show('s-out'); goFullscreen(); };
 $$('[data-back]').forEach(b=>b.onclick=()=>{ if(b.dataset.back==='s-start') resetState(); show(b.dataset.back); });
-$('#dl_ansprech').innerHTML = CONFIG.ansprechpartnerVorschlaege.map(x=>`<option value="${esc(x)}">`).join('');
-
 $('#next1').onclick=()=>{
-  let ok=true;
-  for(const s of ['#f_vorname','#f_nachname','#f_email','#f_ansprech']){ const bad=!$(s).value.trim(); $(s).classList.toggle('err',bad); if(bad) ok=false; }
-  if(S.gruppe===null){ $('#c_gruppe').classList.add('err'); ok=false; }
-  if(S.bereich===null){ $('#c_bereich').classList.add('err'); ok=false; }
-  if(!ok) return msg('#m_daten', t('err_req'));
-  const mail=$('#f_email').value.trim();
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(mail)){ $('#f_email').classList.add('err'); return msg('#m_daten', t('err_mail')); }
-  msg('#m_daten','');
+  let ok=true, mailbad=false;
+  for(const f of felder()){
+    const v=wert(f);
+    const el=f.typ==='auswahl'?$(`.chips[data-key="${CSS.escape(f.key)}"]`):$(`#fld_${CSS.escape(f.key)}`);
+    let bad=f.pflicht&&!v;
+    if(!bad && v && f.typ==='email' && !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(v)){ bad=true; mailbad=true; }
+    if(el) el.classList.toggle('err',bad); if(bad) ok=false;
+  }
+  if(!ok) return msg('#m_daten', mailbad&&felder().every(f=>!f.pflicht||wert(f))?u('err_mail'):u('err_req'));
   show('s-belehrung');
 };
-['#f_vorname','#f_nachname','#f_email','#f_ansprech'].forEach(s=>$(s).addEventListener('input',()=>{$(s).classList.remove('err'); msg('#m_daten','');}));
 
-/* ================= SCHRITT 2 ================= */
-function checkScrolled(){
-  const b=$('#bel');
-  if(b.scrollTop + b.clientHeight >= b.scrollHeight - 30){
-    $('#ck_bel').classList.remove('dis'); $('#scrollhint').style.visibility='hidden';
-  } else { $('#scrollhint').style.visibility='visible'; }
+/* ================= SCHRITT 2: Belehrung ================= */
+function renderBel(){
+  $('#bel').innerHTML=(F.belehrung?.abschnitte||[]).map((s,i)=>`<section><h3><i>${i+1}</i>${esc(L(s.titel))}</h3>${formText(L(s.text))}</section>`).join('');
 }
-$('#bel').addEventListener('scroll', checkScrolled, {passive:true});
+function belPlain(l){
+  const Lx=o=>(o&&(o[l]||o.de))||'';
+  return `Hygienebelehrung ${F.stammdaten?.firma||''} – ${F.stammdaten?.standort||''} (${F.belehrung?.version||'?'}, ${l.toUpperCase()})\n\n`+
+    (F.belehrung?.abschnitte||[]).map((s,i)=>`${i+1}. ${Lx(s.titel)}\n${formPlain(Lx(s.text))}`).join('\n\n')+
+    `\n\n${UI[l].s3}\n${formPlain(Lx(F.gesundheit?.text))}\n\nErklärung / Declaration:\n${Lx(F.texte?.ck_bel)||Lx(FORMULAR_STANDARD.texte.ck_bel)}`;
+}
+function checkScrolled(){ const b=$('#bel'); if(b.scrollTop+b.clientHeight>=b.scrollHeight-30){ $('#ck_bel').classList.remove('dis'); $('#scrollhint').style.visibility='hidden'; } else $('#scrollhint').style.visibility='visible'; }
+$('#bel').addEventListener('scroll',checkScrolled,{passive:true});
 $('#ck_bel').onclick=()=>{ S.belOk=!S.belOk; $('#ck_bel').classList.toggle('on',S.belOk); $('#next2').disabled=!S.belOk; msg('#m_bel',''); };
-$('#next2').onclick=()=>{ if(!S.belOk) return msg('#m_bel',t('err_bel')); show('s-gesundheit'); };
+$('#next2').onclick=()=>{ if(!S.belOk) return msg('#m_bel',u('err_bel')); show('s-gesundheit'); };
 
-/* ================= SCHRITT 3 ================= */
+/* ================= SCHRITT 3: Gesundheit ================= */
 $('#hz_yes').onclick=()=>{ S.gz=true; $('#hz_yes').classList.add('on'); $('#hz_no').classList.remove('on'); msg('#m_hz_warn','','warn'); msg('#m_hz',''); };
-$('#hz_no').onclick=()=>{ S.gz=false; $('#hz_no').classList.add('on'); $('#hz_yes').classList.remove('on'); msg('#m_hz_warn',t('hz_warn'),'warn'); msg('#m_hz',''); };
-$('#next3').onclick=()=>{ if(S.gz===null) return msg('#m_hz',t('err_hz')); show('s-unterschrift'); renderSummary(); };
+$('#hz_no').onclick=()=>{ S.gz=false; $('#hz_no').classList.add('on'); $('#hz_yes').classList.remove('on'); msg('#m_hz_warn',formText(L(F.gesundheit?.warnung)),'warn'); msg('#m_hz',''); };
+$('#next3').onclick=()=>{ if(S.gz===null) return msg('#m_hz',u('err_hz')); show('s-unterschrift'); renderSummary(); };
 
 /* ================= SCHRITT 4: Unterschrift ================= */
 function renderSummary(){
-  const rows=[[t('sum_name'),`${$('#f_vorname').value.trim()} ${$('#f_nachname').value.trim()}`],[t('sum_firma'),$('#f_firma').value.trim()||'–'],
-    [t('sum_mail'),$('#f_email').value.trim()],[t('sum_ansprech'),$('#f_ansprech').value.trim()],[t('sum_bel'),t('sum_ok')],[t('sum_gz'),S.gz?t('sum_ok'):t('sum_nok')]];
-  $('#summary').innerHTML = rows.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join('');
+  const fv=felder().filter(f=>!['vorname','nachname'].includes(f.key)&&wertAnzeige(f));
+  const rows=[[u('sum_name'),`${wert({key:'vorname'})} ${wert({key:'nachname'})}`],...fv.map(f=>[L(f.label).replace(/\s*…$/,''),wertAnzeige(f)]),
+    [u('sum_bel'),u('sum_ok')],[u('sum_gz'),S.gz?u('sum_ok'):u('sum_nok')]];
+  $('#summary').innerHTML=rows.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join('');
 }
-const cv=$('#sig'), ctx=cv.getContext('2d');
-let drawing=false, last=null;
+const cv=$('#sig'), ctx=cv.getContext('2d'); let drawing=false, last=null;
 function sizeSig(){
   const r=cv.getBoundingClientRect(); if(!r.width) return;
-  const keep = S.sigDirty ? cv.toDataURL() : null;
-  const dpr=Math.min(window.devicePixelRatio||1, 2);
-  cv.width=Math.round(r.width*dpr); cv.height=Math.round(r.height*dpr);
-  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const keep=S&&S.sigDirty?cv.toDataURL():null; const dpr=Math.min(window.devicePixelRatio||1,2);
+  cv.width=Math.round(r.width*dpr); cv.height=Math.round(r.height*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#14213D'; ctx.lineWidth=2.6;
   if(keep){ const im=new Image(); im.onload=()=>ctx.drawImage(im,0,0,r.width,r.height); im.src=keep; }
 }
-function clearSig(){ ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height); sizeSig(); if(S){S.sigDirty=false;S.sigLen=0;} $('#t_sig_ph') && ($('#t_sig_ph').style.display=''); }
-function pos(e){ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; }
+function clearSig(){ ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height); if(S){S.sigDirty=false;S.sigLen=0;} sizeSig(); $('#t_sig_ph').style.display=''; }
+function pos(e){ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
 cv.addEventListener('pointerdown',e=>{ e.preventDefault(); cv.setPointerCapture(e.pointerId); drawing=true; last=pos(e); ctx.beginPath(); ctx.arc(last.x,last.y,1.2,0,Math.PI*2); ctx.fillStyle='#14213D'; ctx.fill(); S.sigDirty=true; $('#t_sig_ph').style.display='none'; $('#sigwrap').classList.remove('err'); });
 cv.addEventListener('pointermove',e=>{ if(!drawing) return; e.preventDefault(); const p=pos(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); S.sigLen+=Math.hypot(p.x-last.x,p.y-last.y); last=p; });
 ['pointerup','pointercancel','pointerleave'].forEach(ev=>cv.addEventListener(ev,()=>drawing=false));
 $('#sig_clear').onclick=clearSig;
 window.addEventListener('resize',()=>{ if($('#s-unterschrift').classList.contains('on')) sizeSig(); });
-
-function sigPNG(){
-  // auf weißen Hintergrund, max. 900 px breit
-  const r=cv.getBoundingClientRect(); const w=Math.min(900, Math.round(r.width)); const h=Math.round(w*r.height/r.width);
-  const c=document.createElement('canvas'); c.width=w; c.height=h; const x=c.getContext('2d');
-  x.fillStyle='#fff'; x.fillRect(0,0,w,h); x.drawImage(cv,0,0,w,h); return c.toDataURL('image/png');
-}
+function sigPNG(){ const r=cv.getBoundingClientRect(); const w=Math.min(900,Math.round(r.width)); const h=Math.round(w*r.height/r.width);
+  const c=document.createElement('canvas'); c.width=w; c.height=h; const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,w,h); x.drawImage(cv,0,0,w,h); return c.toDataURL('image/png'); }
 $('#ck_ds').onclick=e=>{ if(e.target.id==='open_ds') return; S.ds=!S.ds; $('#ck_ds').classList.toggle('on',S.ds); $('#ck_ds').classList.remove('err'); };
 $('#open_ds').onclick=e=>{ e.preventDefault(); e.stopPropagation(); $('#mod_ds').classList.add('on'); };
 $('#ds_close').onclick=()=>$('#mod_ds').classList.remove('on');
@@ -628,94 +473,74 @@ $('#ds_close').onclick=()=>$('#mod_ds').classList.remove('on');
 let sending=false;
 $('#submit').onclick=async()=>{
   if(sending) return;
-  if(!S.sigDirty || S.sigLen<60){ $('#sigwrap').classList.add('err'); return msg('#m_sig',t('err_sig')); }
-  if(!S.ds){ $('#ck_ds').classList.add('err'); return msg('#m_sig',t('err_ds')); }
-  msg('#m_sig','');
-  sending=true; const btn=$('#submit'); btn.disabled=true; btn.innerHTML=`<span class="spinner"></span>${esc(t('sending'))}`;
-  const p = {
-    vorname:$('#f_vorname').value.trim(), nachname:$('#f_nachname').value.trim(), firma:$('#f_firma').value.trim(),
-    email:$('#f_email').value.trim(), telefon:$('#f_telefon').value.trim(), ansprechpartner:$('#f_ansprech').value.trim(),
-    besuchergruppe:T.de.gruppen[S.gruppe], bereich:T.de.bereiche[S.bereich],
-    belehrung_version:CONFIG.belehrungVersion, belehrung_text:belPlain(lang), belehrung_bestaetigt:true,
-    gesundheit_bestaetigt:S.gz===true, datenschutz_bestaetigt:true, sprache:lang, unterschrift:sigPNG(),
-    geraet:'Kiosk '+CONFIG.standort
-  };
-  try{
-    const r = await rpc('besucher_checkin',{p});
-    doneScreen('in', r.vorname, r.checkin_at, !p.gesundheit_bestaetigt);
-  }catch(e){
-    msg('#m_sig', esc(t('err_net')) + (e.server ? `<br><small>${esc(e.message)}</small>` : ''));
-  }finally{ sending=false; btn.disabled=false; btn.textContent=t('submit'); }
+  if(!S.sigDirty||S.sigLen<60){ $('#sigwrap').classList.add('err'); return msg('#m_sig',u('err_sig')); }
+  if(!S.ds){ $('#ck_ds').classList.add('err'); return msg('#m_sig',u('err_ds')); }
+  msg('#m_sig',''); sending=true; const btn=$('#submit'); btn.disabled=true; btn.innerHTML=`<span class="spinner"></span>${esc(u('sending'))}`;
+  const angaben={}; felder().forEach(f=>{ if(!['vorname','nachname'].includes(f.key)){ const v=wert(f); if(v) angaben[f.key]=v; } });
+  const p={ vorname:wert({key:'vorname'}), nachname:wert({key:'nachname'}), angaben,
+    belehrung_version:F.belehrung?.version||'?', belehrung_text:belPlain(lang), belehrung_bestaetigt:true,
+    gesundheit_bestaetigt:S.gz===true, datenschutz_bestaetigt:true, sprache:lang, unterschrift:sigPNG(), geraet:'Kiosk '+(F.stammdaten?.standort||'') };
+  try{ const r=await rpc('besucher_checkin',{p}); doneScreen('in',r.vorname,r.checkin_at,!p.gesundheit_bestaetigt); }
+  catch(e){ msg('#m_sig',esc(u('err_net'))+(e.server?`<br><small>${esc(e.message)}</small>`:'')); }
+  finally{ sending=false; btn.disabled=false; btn.textContent=u('submit'); }
 };
 
 /* ================= FERTIG ================= */
 let cdTimer=null;
-function doneScreen(kind, name, at, warn){
+function doneScreen(kind,name,at,warn){
   show('s-done');
-  if(kind==='in'){
-    $('#done_title').textContent=t('done_title')(name); $('#done_time').textContent=t('done_time')(hhmm(at)); $('#done_text').textContent=t('done_text');
-  } else {
-    $('#done_title').textContent=t('out_done')(name); $('#done_time').textContent=t('out_done_time')(hhmm(at)); $('#done_text').textContent=t('out_done_text');
-  }
-  const n=$('#done_notice'); n.style.display = warn?'inline-block':'none'; n.textContent=t('done_notice');
-  let s = warn?20:12; clearInterval(cdTimer);
-  const tick=()=>{ $('#done_cd').textContent=t('cd')(s); if(s--<=0){ clearInterval(cdTimer); home(); } };
+  $('#done_title').textContent=kind==='in'?u('done_title')(name):u('out_done')(name);
+  $('#done_time').textContent=kind==='in'?u('done_time')(hhmm(at)):u('out_done_time')(hhmm(at));
+  $('#done_text').textContent=kind==='in'?tx('done_text'):tx('out_done_text');
+  const n=$('#done_notice'); n.style.display=warn?'inline-block':'none'; n.textContent=u('done_notice');
+  let s=warn?20:12; clearInterval(cdTimer);
+  const tick=()=>{ $('#done_cd').textContent=u('cd')(s); if(s--<=0){ clearInterval(cdTimer); home(); } };
   tick(); cdTimer=setInterval(tick,1000);
 }
 $('#done_ok').onclick=()=>{ clearInterval(cdTimer); home(); };
-function home(){ resetState(); lang='de'; applyLang(); show('s-start'); }
+async function home(){ lang='de'; resetState(); applyLang(); show('s-start'); if(Date.now()-F_ts>120000){ await loadForm(); resetState(); applyLang(); } }
 
 /* ================= ABMELDEN ================= */
 let qTimer=null, pick=null;
 $('#f_suche').addEventListener('input',()=>{
-  clearTimeout(qTimer); msg('#m_out','');
-  const q=$('#f_suche').value.trim();
+  clearTimeout(qTimer); msg('#m_out',''); const q=$('#f_suche').value.trim();
   if(q.length<2){ $('#results').innerHTML=''; return; }
   qTimer=setTimeout(async()=>{
-    try{
-      const rows = await rpc('besucher_suche',{q});
-      if($('#f_suche').value.trim()!==q) return;
-      $('#results').innerHTML = rows.length ? rows.map(r=>`<button class="res" data-id="${r.id}" data-n="${esc(r.anzeige)}"><div><b>${esc(r.anzeige)}</b><small>${esc(r.firma||'')}${r.firma?' · ':''}${esc(t('since')(hhmm(r.checkin_at)))}</small></div><span class="go">${esc(t('out_btn'))}</span></button>`).join('')
-        : `<div class="empty">${esc(t('out_none'))}</div>`;
-      $$('#results .res').forEach(b=>b.onclick=()=>confirmOut(b.dataset.id, b.dataset.n));
-    }catch(e){ msg('#m_out', esc(t('err_net'))); }
-  }, 300);
+    try{ const rows=await rpc('besucher_suche',{q}); if($('#f_suche').value.trim()!==q) return;
+      $('#results').innerHTML=rows.length?rows.map(r=>`<button class="res" data-id="${r.id}" data-n="${esc(r.anzeige)}"><div><b>${esc(r.anzeige)}</b><small>${esc(r.firma||'')}${r.firma?' · ':''}${esc(u('since')(hhmm(r.checkin_at)))}</small></div><span class="go">${esc(u('out_btn'))}</span></button>`).join('')
+        :`<div class="empty">${esc(u('out_none'))}</div>`;
+      $$('#results .res').forEach(b=>b.onclick=()=>confirmOut(b.dataset.id,b.dataset.n));
+    }catch(e){ msg('#m_out',esc(u('err_net'))); }
+  },300);
 });
-function confirmOut(id, n){
-  pick={id, n: n.split(' ')[0]};
-  $('#conf_title').textContent=t('conf_title')(n); $('#conf_text').textContent=t('conf_text');
-  $('#conf_yes').textContent=t('yes'); $('#conf_no').textContent=t('no');
-  $('#mod_confirm').classList.add('on');
-}
+function confirmOut(id,n){ pick={id}; $('#conf_title').textContent=u('conf_title')(n); $('#conf_text').textContent=u('conf_text'); $('#conf_yes').textContent=u('yes'); $('#conf_no').textContent=u('no'); $('#mod_confirm').classList.add('on'); }
 $('#conf_no').onclick=()=>$('#mod_confirm').classList.remove('on');
-$('#conf_yes').onclick=async()=>{
-  $('#mod_confirm').classList.remove('on');
-  try{ const r=await rpc('besucher_checkout',{p_id:pick.id}); doneScreen('out', r.vorname, r.checkout_at, false); }
-  catch(e){ msg('#m_out', esc(e.server?e.message:t('err_net'))); }
-};
+$('#conf_yes').onclick=async()=>{ $('#mod_confirm').classList.remove('on');
+  try{ const r=await rpc('besucher_checkout',{p_id:pick.id}); doneScreen('out',r.vorname,r.checkout_at,false); }
+  catch(e){ msg('#m_out',esc(e.server?e.message:u('err_net'))); } };
 
-/* ================= LEERLAUF / KIOSK ================= */
+/* ================= KIOSK ================= */
 let idle=0;
 ['pointerdown','keydown','scroll','input','touchmove'].forEach(ev=>document.addEventListener(ev,()=>idle=0,{passive:true,capture:true}));
-setInterval(()=>{
-  idle++;
-  const cur=$('.screen.on')?.id;
-  if(cur!=='s-start' && cur!=='s-done' && idle>CONFIG.leerlaufSekunden){ $$('.modal').forEach(m=>m.classList.remove('on')); home(); }
+setInterval(()=>{ idle++; const cur=$('.screen.on')?.id;
+  if(cur!=='s-start'&&cur!=='s-done'&&idle>API.leerlaufSekunden){ $$('.modal').forEach(m=>m.classList.remove('on')); home(); }
+  if(cur==='s-start'&&idle>600&&Date.now()-F_ts>600000){ idle=0; loadForm().then(()=>{ if($('.screen.on')?.id==='s-start'){ resetState(); applyLang(); } }); }
 },1000);
 function clock(){ $('#clock').textContent=new Date().toLocaleString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:'Europe/Berlin'}); }
 clock(); setInterval(clock,15000);
-function net(){ $('#offline').classList.toggle('on', !navigator.onLine); }
+function net(){ $('#offline').classList.toggle('on',!navigator.onLine); }
 window.addEventListener('online',net); window.addEventListener('offline',net); net();
 async function goFullscreen(){
-  try{ if(!document.fullscreenElement && document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen({navigationUI:'hide'}); }catch(e){}
-  try{ if('wakeLock' in navigator && !window._wl){ window._wl = await navigator.wakeLock.request('screen'); window._wl.addEventListener('release',()=>window._wl=null); } }catch(e){}
+  try{ if(!document.fullscreenElement&&document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen({navigationUI:'hide'}); }catch(e){}
+  try{ if('wakeLock' in navigator&&!window._wl){ window._wl=await navigator.wakeLock.request('screen'); window._wl.addEventListener('release',()=>window._wl=null); } }catch(e){}
 }
-document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') { window._wl=null; goFullscreen(); } });
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'){ window._wl=null; goFullscreen(); } });
 document.addEventListener('contextmenu',e=>e.preventDefault());
 
 /* ================= START ================= */
 resetState(); applyLang();
-if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+loadForm().then(()=>{ if($('.screen.on')?.id==='s-start'){ resetState(); applyLang(); } });
+if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
