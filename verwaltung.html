@@ -297,15 +297,15 @@ function render(){
   const r=rows();
   if(TAB==='haus'){
     $('#kpis').innerHTML=`<div class="kpi"><b>${r.length}</b><span>Personen im Haus</span></div>
-      <div class="kpi"><b>${r.filter(x=>/Küche|Mehrere|Lager/.test(x.bereich)).length}</b><span>in Küche / Lager / mehreren Bereichen</span></div>
+      <div class="kpi"><b>${r.filter(x=>/Küche|Mehrere|Lager|Produktion/.test(x.bereich||'')).length}</b><span>in Küche, Produktion oder Lager</span></div>
       <div class="kpi"><b style="color:${r.some(x=>!x.gesundheit_bestaetigt)?'var(--red)':'inherit'}">${r.filter(x=>!x.gesundheit_bestaetigt).length}</b><span>ohne Gesundheitserklärung</span></div>`;
     $('#tbl').innerHTML=`<thead><tr><th>Seit</th><th>Name</th><th>Firma</th><th class="hide-m">Gruppe</th><th>Bereich</th><th>Ansprechpartner</th><th class="hide-m">Telefon</th><th>Gesundh.</th><th></th></tr></thead><tbody>`+
-      (r.length?r.map(x=>`<tr class="row" data-id="${x.id}"><td>${hhmm(x.checkin_at)}</td><td><b>${esc(x.vorname)} ${esc(x.nachname)}</b></td><td>${esc(x.firma||'')}</td><td class="hide-m">${esc(x.besuchergruppe)}</td><td>${esc(x.bereich)}</td><td>${esc(x.ansprechpartner)}</td><td class="hide-m">${esc(x.telefon||'')}</td><td>${x.gesundheit_bestaetigt?'✓':'<span class="tag no">nein</span>'}</td><td><button class="btn sm" data-out="${x.id}">Abmelden</button></td></tr>`).join('')
+      (r.length?r.map(x=>`<tr class="row" data-id="${x.id}"><td>${hhmm(x.checkin_at)}</td><td><b>${esc(x.vorname)} ${esc(x.nachname)}</b></td><td>${esc(x.firma||'')}</td><td class="hide-m">${esc(x.besuchergruppe)}</td><td>${esc(x.bereich)}</td><td>${esc(x.ansprechpartner||'')}${x.angaben&&x.angaben.ansprechpartner_abteilung?`<br><small style="color:var(--ink2)">${esc(x.angaben.ansprechpartner_abteilung)}</small>`:''}</td><td class="hide-m">${esc(x.telefon||'')}</td><td>${x.gesundheit_bestaetigt?'✓':'<span class="tag no">nein</span>'}</td><td><button class="btn sm" data-out="${x.id}">Abmelden</button></td></tr>`).join('')
       :'<tr><td colspan="9" class="empty">Zurzeit ist kein Besucher angemeldet.</td></tr>')+'</tbody>';
   } else {
     $('#kpis').innerHTML=`<div class="kpi"><b>${r.length}</b><span>Besuche im Zeitraum</span></div><div class="kpi"><b>${new Set(r.map(x=>(x.firma||'').toLowerCase()).filter(Boolean)).size}</b><span>Firmen</span></div><div class="kpi"><b>${r.filter(x=>x.checkout_art==='automatisch').length}</b><span>nicht abgemeldet</span></div>`;
     $('#tbl').innerHTML=`<thead><tr><th>Kommen</th><th>Gehen</th><th>Name</th><th>Firma</th><th class="hide-m">E-Mail</th><th class="hide-m">Gruppe</th><th>Bereich</th><th>Ansprechpartner</th><th>Gesundh.</th></tr></thead><tbody>`+
-      (r.length?r.map(x=>`<tr class="row" data-id="${x.id}"><td>${dt(x.checkin_at)}</td><td>${status(x)}</td><td><b>${esc(x.vorname)} ${esc(x.nachname)}</b></td><td>${esc(x.firma||'')}</td><td class="hide-m">${esc(x.email||'–')}</td><td class="hide-m">${esc(x.besuchergruppe)}</td><td>${esc(x.bereich)}</td><td>${esc(x.ansprechpartner)}</td><td>${x.gesundheit_bestaetigt?'✓':'<span class="tag no">nein</span>'}</td></tr>`).join('')
+      (r.length?r.map(x=>`<tr class="row" data-id="${x.id}"><td>${dt(x.checkin_at)}</td><td>${status(x)}</td><td><b>${esc(x.vorname)} ${esc(x.nachname)}</b></td><td>${esc(x.firma||'')}</td><td class="hide-m">${esc(x.email||'–')}</td><td class="hide-m">${esc(x.besuchergruppe)}</td><td>${esc(x.bereich)}</td><td>${esc(x.ansprechpartner||'')}${x.angaben&&x.angaben.ansprechpartner_abteilung?`<br><small style="color:var(--ink2)">${esc(x.angaben.ansprechpartner_abteilung)}</small>`:''}</td><td>${x.gesundheit_bestaetigt?'✓':'<span class="tag no">nein</span>'}</td></tr>`).join('')
       :'<tr><td colspan="9" class="empty">Keine Besuche im Zeitraum.</td></tr>')+'</tbody>';
   }
   $$('#tbl tr.row').forEach(tr=>tr.onclick=e=>{ if(e.target.dataset.out) return; detail(tr.dataset.id); });
@@ -348,7 +348,7 @@ $('#b_evak').onclick=()=>{
   const r=ROWS.filter(x=>!x.checkout_at);
   $('#print').innerHTML=`<img src="img/abc-logo.svg" style="height:46px;margin-bottom:10px"><h1>Evakuierungsliste Besucher – ${esc(SD().standort)}</h1><p>Stand: ${dt(new Date())} · ${r.length} Person(en) im Haus · gedruckt von ${esc(ME.name)}</p>
    <table><tr><th style="width:28px">✓</th><th>Name</th><th>Firma</th><th>Ansprechpartner</th><th>Bereich</th><th>Seit</th><th>Telefon</th></tr>
-   ${r.map(x=>`<tr><td></td><td>${esc(x.vorname)} ${esc(x.nachname)}</td><td>${esc(x.firma||'')}</td><td>${esc(x.ansprechpartner)}</td><td>${esc(x.bereich)}</td><td>${hhmm(x.checkin_at)}</td><td>${esc(x.telefon||'')}</td></tr>`).join('')||'<tr><td colspan="7">Keine Besucher im Haus.</td></tr>'}</table>`;
+   ${r.map(x=>`<tr><td></td><td>${esc(x.vorname)} ${esc(x.nachname)}</td><td>${esc(x.firma||'')}</td><td>${esc(x.ansprechpartner||'')}${x.angaben&&x.angaben.ansprechpartner_abteilung?`<br><small style="color:var(--ink2)">${esc(x.angaben.ansprechpartner_abteilung)}</small>`:''}</td><td>${esc(x.bereich)}</td><td>${hhmm(x.checkin_at)}</td><td>${esc(x.telefon||'')}</td></tr>`).join('')||'<tr><td colspan="7">Keine Besucher im Haus.</td></tr>'}</table>`;
   window.print();
 };
 $('#b_csv').onclick=()=>{
@@ -409,7 +409,7 @@ const STD_KEYS=['vorname','nachname','firma','email','telefon','besuchergruppe',
 const clone=o=>JSON.parse(JSON.stringify(o));
 let CFG=null, CFG_ORIG='', FE_SAVED=null;
 const SD=()=>(CFG&&CFG.stammdaten)||FORMULAR_STANDARD.stammdaten;
-function feldLabel(k){ const f=((CFG&&CFG.felder)||FORMULAR_STANDARD.felder).find(x=>x.key===k); return f?f.label.de.replace(/\s*…$/,''):k; }
+function feldLabel(k){ if(k.endsWith('_abteilung')) return feldLabel(k.slice(0,-10))+' – Abteilung'; const f=((CFG&&CFG.felder)||FORMULAR_STANDARD.felder).find(x=>x.key===k); return f?f.label.de.replace(/\s*…$/,''):k; }
 function zusatz(a){ return Object.entries(a||{}).filter(([k])=>!STD_KEYS.includes(k)).map(([k,v])=>[feldLabel(k),v]); }
 function vervollst(c){ const S=clone(FORMULAR_STANDARD); c=c||{};
   for(const k of ['stammdaten','texte','belehrung','gesundheit','datenschutz']) c[k]=c[k]?(k==='texte'||k==='stammdaten'?{...S[k],...c[k]}:c[k]):S[k];
@@ -421,12 +421,13 @@ window.addEventListener('beforeunload',e=>{ if(dirty()){ e.preventDefault(); e.r
 async function feOpen(){ if(!CFG) await loadCfg(); feRender(); }
 function getP(o,p){ return p.split('.').reduce((a,k)=>a==null?a:a[k],o); }
 function setP(o,p,v){ const k=p.split('.'); let x=o; for(let i=0;i<k.length-1;i++){ if(x[k[i]]==null) x[k[i]]={}; x=x[k[i]]; } x[k[k.length-1]]=v; }
-const TYPEN={text:'Text',email:'E-Mail',tel:'Telefon',auswahl:'Auswahl'};
+const TYPEN={text:'Text',email:'E-Mail',tel:'Telefon',auswahl:'Auswahl (eine)',mehrfach:'Mehrfachauswahl',person:'Mitarbeiter-Auswahl'};
+const MITLISTE=t=>['auswahl','mehrfach','person'].includes(t);
 const TEXTE=[['site','Untertitel oben (neben Logo)'],['welcome','Begrüßung Startseite'],['welcome_sub','Text unter der Begrüßung'],['start_hint','Hinweis unten auf der Startseite'],
   ['s2_sub','Einleitung zur Belehrung'],['ck_bel','Bestätigungssatz unter der Belehrung'],['done_text','Text nach der Anmeldung'],['out_done_text','Text nach der Abmeldung']];
 const ta=(p,rows)=>`<textarea class="t" data-p="${p}" rows="${rows||2}">${esc(getP(CFG,p)||'')}</textarea>`;
 const two=(p,rows)=>`<div class="two"><div><label>Deutsch</label>${ta(p+'.de',rows)}</div><div><label>English</label>${ta(p+'.en',rows)}</div></div>`;
-const optText=f=>(f.optionen||[]).map(o=>o.de+(o.en&&o.en!==o.de?' | '+o.en:'')).join('\n');
+const optText=f=>f.typ==='person'?(f.optionen||[]).map(o=>(o.name||'')+(o.abteilung?' | '+o.abteilung:'')).join('\n'):(f.optionen||[]).map(o=>o.de+(o.en&&o.en!==o.de?' | '+o.en:'')).join('\n');
 let feOpenOpt=new Set();
 function feRender(){
   const c=CFG, sv=FE_SAVED&&FE_SAVED.version;
@@ -438,16 +439,16 @@ function feRender(){
   <div class="msg err" id="m_fe"></div>
   <details class="ed-sec" data-s="felder" ${isOpen('felder')?'open':''}><summary>Abgefragte Angaben <small>Felder, Kategorien, Pflichtfelder, Reihenfolge</small></summary><div class="ed-body">
     <p class="ed-hint">Vorname und Nachname sind immer Pflicht (für das Abmelden). Deaktivierte Felder werden auf dem Tablet nicht angezeigt, bleiben aber bei alten Besuchen sichtbar. Bei „Auswahl“ und „Text“ legen Sie unter „Werte“ die Kategorien bzw. Vorschläge fest.</p>
-    <table class="ft"><thead><tr><th></th><th>Bezeichnung (Deutsch)</th><th>Bezeichnung (English)</th><th style="width:150px">Art</th><th class="cb">Pflicht</th><th class="cb">Aktiv</th><th></th></tr></thead><tbody>
+    <table class="ft"><thead><tr><th></th><th>Bezeichnung (Deutsch)</th><th>Bezeichnung (English)</th><th style="width:200px">Art</th><th class="cb">Pflicht</th><th class="cb">Aktiv</th><th></th></tr></thead><tbody>
     ${c.felder.map((f,i)=>{
-      const opt=f.typ==='auswahl'||feOpenOpt.has(f.key);
+      const opt=MITLISTE(f.typ)||feOpenOpt.has(f.key);
       return `<tr class="${f.aktiv===false?'off':''}"><td><div class="mv"><button data-mv="${i}" data-d="-1" ${i===0?'disabled':''}>▲</button><button data-mv="${i}" data-d="1" ${i===c.felder.length-1?'disabled':''}>▼</button></div></td>
       <td><input class="t" data-p="felder.${i}.label.de" value="${esc(f.label.de)}"></td><td><input class="t" data-p="felder.${i}.label.en" value="${esc(f.label.en||'')}"></td>
       <td>${f.fest?'<span class="tag fest">Text (fest)</span>':`<select class="t" data-typ="${i}">${Object.entries(TYPEN).map(([k,v])=>`<option value="${k}" ${f.typ===k?'selected':''}>${v}</option>`).join('')}</select>`}</td>
       <td class="cb"><input type="checkbox" data-b="felder.${i}.pflicht" ${f.pflicht?'checked':''} ${f.fest?'disabled':''}></td>
       <td class="cb"><input type="checkbox" data-b="felder.${i}.aktiv" ${f.aktiv!==false?'checked':''} ${f.fest?'disabled':''}></td>
-      <td><div class="tools" style="flex-wrap:nowrap">${f.fest?'':`${f.typ!=='auswahl'&&!['email','tel'].includes(f.typ)?`<button class="btn sm" data-opt="${f.key}">${opt?'Vorschläge ▴':'Vorschläge'}</button>`:''}${STD_KEYS.includes(f.key)?'':`<button class="btn sm w" data-del="${i}">Entfernen</button>`}`}</div></td></tr>
-      ${opt&&!f.fest?`<tr class="sub"><td></td><td colspan="6"><label class="ed-hint" style="display:block;margin:0 0 4px">${f.typ==='auswahl'?'<b>Kategorien</b> – eine pro Zeile, optional mit englischer Übersetzung: <code>Deutsch | English</code>':'<b>Vorschläge</b> beim Tippen (eine pro Zeile, <code>Deutsch | English</code>) – frei eintippen bleibt möglich'}</label>
+      <td><div class="tools" style="flex-wrap:nowrap">${f.fest?'':`${f.typ==='text'?`<button class="btn sm" data-opt="${f.key}">${opt?'Vorschläge ▴':'Vorschläge'}</button>`:''}${STD_KEYS.includes(f.key)?'':`<button class="btn sm w" data-del="${i}">Entfernen</button>`}`}</div></td></tr>
+      ${opt&&!f.fest?`<tr class="sub"><td></td><td colspan="6"><label class="ed-hint" style="display:block;margin:0 0 4px">${f.typ==='person'?'<b>Mitarbeiterliste</b> – eine Person pro Zeile: <code>Name | Abteilung</code>. Auf dem Tablet wählt man den Namen aus (oder tippt frei), die Abteilung füllt sich automatisch. Hinweis: Die Liste ist für das Tablet öffentlich abrufbar – nur Name und Abteilung eintragen.':MITLISTE(f.typ)?'<b>Kategorien</b> – eine pro Zeile, optional mit englischer Übersetzung: <code>Deutsch | English</code>':'<b>Vorschläge</b> beim Tippen (eine pro Zeile, <code>Deutsch | English</code>) – frei eintippen bleibt möglich'}</label>
         <textarea class="t" data-optta="${i}" rows="${Math.min(10,Math.max(3,(f.optionen||[]).length+1))}">${esc(optText(f))}</textarea></td></tr>`:''}`;}).join('')}
     </tbody></table>
     <div style="margin-top:10px"><button class="btn" id="fe_add">+ Feld hinzufügen</button></div>
@@ -476,8 +477,10 @@ function feRender(){
   const F=$('#formular');
   F.querySelectorAll('[data-p]').forEach(el=>el.addEventListener('input',()=>{ setP(CFG,el.dataset.p,el.value); feState(); }));
   F.querySelectorAll('[data-b]').forEach(el=>el.addEventListener('change',()=>{ setP(CFG,el.dataset.b,el.checked); feRender(); }));
-  F.querySelectorAll('[data-typ]').forEach(el=>el.addEventListener('change',()=>{ const f=CFG.felder[+el.dataset.typ]; f.typ=el.value; if(f.typ==='auswahl'&&!(f.optionen||[]).length) f.optionen=[{de:'Option 1',en:'Option 1'}]; feRender(); }));
-  F.querySelectorAll('[data-optta]').forEach(el=>el.addEventListener('input',()=>{ CFG.felder[+el.dataset.optta].optionen=el.value.split('\n').map(x=>x.trim()).filter(Boolean).map(x=>{ const [de,en]=x.split('|').map(y=>y.trim()); return {de,en:en||de}; }); feState(); }));
+  F.querySelectorAll('[data-typ]').forEach(el=>el.addEventListener('change',()=>{ const f=CFG.felder[+el.dataset.typ]; const alt=f.typ; f.typ=el.value;
+    if((alt==='person')!==(f.typ==='person')) f.optionen=[];
+    if((f.typ==='auswahl'||f.typ==='mehrfach')&&!(f.optionen||[]).length) f.optionen=[{de:'Option 1',en:'Option 1'}]; feRender(); }));
+  F.querySelectorAll('[data-optta]').forEach(el=>el.addEventListener('input',()=>{ const ff=CFG.felder[+el.dataset.optta]; ff.optionen=el.value.split('\n').map(x=>x.trim()).filter(Boolean).map(x=>{ const [a,b]=x.split('|').map(y=>y.trim()); return ff.typ==='person'?{name:a,abteilung:b||''}:{de:a,en:b||a}; }); feState(); }));
   F.querySelectorAll('[data-opt]').forEach(el=>el.onclick=()=>{ const k=el.dataset.opt; feOpenOpt.has(k)?feOpenOpt.delete(k):feOpenOpt.add(k); feRender(); });
   F.querySelectorAll('[data-mv]').forEach(el=>el.onclick=()=>{ const i=+el.dataset.mv, j=i+(+el.dataset.d); const a=CFG.felder; [a[i],a[j]]=[a[j],a[i]]; feRender(); });
   F.querySelectorAll('[data-del]').forEach(el=>el.onclick=()=>{ const f=CFG.felder[+el.dataset.del]; if(confirm(`Feld „${f.label.de}“ entfernen? (Bei alten Besuchen bleibt der Wert gespeichert.)`)){ CFG.felder.splice(+el.dataset.del,1); feRender(); } });
@@ -496,8 +499,8 @@ $('#fe_save').onclick=async()=>{
   const keys=new Set(), fehler=[];
   CFG.felder.forEach(f=>{ if(!f.label.de.trim()) fehler.push('Ein Feld hat keine deutsche Bezeichnung.'); if(!f.label.en||!f.label.en.trim()) f.label.en=f.label.de;
     if(keys.has(f.key)) fehler.push('Doppeltes Feld: '+f.key); keys.add(f.key);
-    if(f.typ==='auswahl'&&!(f.optionen||[]).length) fehler.push(`„${f.label.de}“ braucht mindestens eine Kategorie.`);
-    if(f.typ!=='auswahl'&&f.typ!=='text') delete f.optionen; });
+    if((f.typ==='auswahl'||f.typ==='mehrfach')&&!(f.optionen||[]).length) fehler.push(`„${f.label.de}“ braucht mindestens eine Kategorie.`);
+    if(f.typ==='email'||f.typ==='tel') delete f.optionen; });
   if(!CFG.belehrung.abschnitte.length) fehler.push('Die Belehrung braucht mindestens einen Abschnitt.');
   if(fehler.length) return msg('#m_fe',fehler.map(esc).join('<br>'));
   const alt=JSON.parse(CFG_ORIG), belNeu=JSON.stringify([CFG.belehrung.abschnitte,CFG.gesundheit.text,CFG.texte.ck_bel])!==JSON.stringify([alt.belehrung.abschnitte,alt.gesundheit.text,alt.texte.ck_bel]);

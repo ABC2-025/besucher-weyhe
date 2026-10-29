@@ -26,20 +26,18 @@ window.FORMULAR_STANDARD = {
     { key: 'firma',    typ: 'text',  pflicht: false, aktiv: true, label: { de: 'Firma', en: 'Company' } },
     { key: 'email',    typ: 'email', pflicht: true,  aktiv: true, label: { de: 'E-Mail-Adresse', en: 'Email address' } },
     { key: 'telefon',  typ: 'tel',   pflicht: false, aktiv: true, label: { de: 'Telefon', en: 'Phone' } },
-    { key: 'ansprechpartner', typ: 'text', pflicht: true, aktiv: true, label: { de: 'Ansprechpartner bei uns', en: 'Contact person here' },
-      optionen: [
-        { de: 'Produktionsleitung', en: 'Produktionsleitung' }, { de: 'Betriebsleitung', en: 'Betriebsleitung' },
-        { de: 'Qualitätsmanagement', en: 'Qualitätsmanagement' }, { de: 'Empfang / Verwaltung', en: 'Empfang / Verwaltung' },
-        { de: 'Einkauf', en: 'Einkauf' }, { de: 'Geschäftsführung', en: 'Geschäftsführung' } ] },
+    { key: 'ansprechpartner', typ: 'person', pflicht: true, aktiv: true, label: { de: 'Ansprechpartner bei uns', en: 'Contact person here' },
+      /* Mitarbeiterliste: Name + Abteilung. Pflege in der Verwaltung unter „Formular & Texte“. Freitext bleibt möglich. */
+      optionen: [] },
     { key: 'besuchergruppe', typ: 'auswahl', pflicht: true, aktiv: true, label: { de: 'Ich bin hier als …', en: 'I am here as …' },
       optionen: [
         { de: 'Besprechung / Gast', en: 'Meeting / guest' }, { de: 'Außendienst Lieferant', en: 'Supplier sales rep' },
         { de: 'Handwerker / Techniker', en: 'Tradesperson / technician' }, { de: 'Lieferant / Fahrer', en: 'Supplier / driver' },
         { de: 'Bewerber/in', en: 'Job applicant' }, { de: 'Sonstiges', en: 'Other' } ] },
-    { key: 'bereich', typ: 'auswahl', pflicht: true, aktiv: true, label: { de: 'Ich besuche …', en: 'I am visiting …' },
+    { key: 'bereich', typ: 'mehrfach', pflicht: true, aktiv: true, label: { de: 'Welche Bereiche betreten Sie?', en: 'Which areas will you enter?' },
       optionen: [
         { de: 'Verwaltung / Büro', en: 'Administration / office' }, { de: 'Küche / Produktion', en: 'Kitchen / production' },
-        { de: 'Lager / Wareneingang', en: 'Storage / goods receipt' }, { de: 'Mehrere Bereiche', en: 'Several areas' } ] },
+        { de: 'Lager / Wareneingang', en: 'Storage / goods receipt' } ] },
   ],
   belehrung: {
     version: 'BEL-2026-10-v1',

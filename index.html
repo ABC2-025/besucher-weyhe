@@ -149,6 +149,21 @@ label.f small{font-size:14px}
   .card{padding:18px}
   .btn{min-width:0;padding:16px 20px}
 }
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px}
+.pwrap{position:relative}
+.pdrop{display:none;position:absolute;left:0;right:0;top:100%;margin-top:6px;background:#fff;border:1.5px solid #CBD0D6;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);max-height:320px;overflow-y:auto;z-index:30}
+.pdrop.on{display:block}
+.pdrop button{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:#fff;padding:14px 16px;font-size:18px;color:var(--ink)}
+.pdrop button:last-child{border-bottom:0}
+.pdrop button:active,.pdrop button:hover{background:var(--pri-l)}
+.pdrop button span{color:var(--ink2);font-size:15px}
+.pdrop .leer{padding:14px 16px;color:var(--ink2);font-size:16px}
+.mhint{color:var(--ink2);font-weight:500;font-size:14px}
+.chips.multi .chip{display:inline-flex;align-items:center;gap:10px}
+.chips.multi .tick{width:22px;height:22px;border-radius:6px;border:2px solid #9AA3AD;display:inline-grid;place-items:center;background:#fff;flex:none}
+.chips.multi .chip.on .tick{background:var(--pri);border-color:var(--pri)}
+.chips.multi .chip.on .tick::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+@media (max-width:760px){.pgrid{grid-template-columns:1fr}}
 </style>
 <link rel="stylesheet" href="abc-stil.css">
 </head>
@@ -272,7 +287,7 @@ const API = {
 
 /* Feste Bedienelemente (Inhalte/Felder/Belehrung kommen aus „Formular & Texte“ in der Verwaltung) */
 const UI = {
-de:{ eb:'Besucheranmeldung', btn_in:'Anmelden', btn_in_sub:'Ich komme an', btn_out:'Abmelden', btn_out_sub:'Ich gehe',
+de:{ eb:'Besucheranmeldung', multi:'(Mehrfachauswahl möglich)', abteilung:'Abteilung', person_ph:'Name eingeben oder auswählen …', person_frei:'Nicht in der Liste – Name einfach so eintragen.', btn_in:'Anmelden', btn_in_sub:'Ich komme an', btn_out:'Abmelden', btn_out_sub:'Ich gehe',
   s1:'1 · Ihre Angaben', s1_sub:'Pflichtfelder sind mit * gekennzeichnet.', cancel:'Abbrechen', next:'Weiter', back:'Zurück',
   err_req:'Bitte füllen Sie alle Pflichtfelder aus.', err_mail:'Bitte prüfen Sie die E-Mail-Adresse.', optional:'(optional)',
   s2:'2 · Hygienebelehrung', scroll:'Bitte bis zum Ende lesen', err_bel:'Bitte bestätigen Sie die Belehrung.',
@@ -293,7 +308,7 @@ de:{ eb:'Besucheranmeldung', btn_in:'Anmelden', btn_in_sub:'Ich komme an', btn_o
   out_done:n=>`Auf Wiedersehen, ${n}!`, out_done_time:t=>`Abgemeldet um ${t} Uhr`,
   offline:'Keine Internetverbindung – Anmeldung gerade nicht möglich. Bitte am Empfang melden.',
   err_net:'Speichern fehlgeschlagen. Bitte erneut versuchen oder am Empfang melden.', ds_title:'Datenschutzhinweis (Art. 13 DSGVO)' },
-en:{ eb:'Visitor registration', btn_in:'Sign in', btn_in_sub:'I am arriving', btn_out:'Sign out', btn_out_sub:'I am leaving',
+en:{ eb:'Visitor registration', multi:'(multiple choice)', abteilung:'Department', person_ph:'Type or select a name …', person_frei:'Not in the list – just type the name.', btn_in:'Sign in', btn_in_sub:'I am arriving', btn_out:'Sign out', btn_out_sub:'I am leaving',
   s1:'1 · Your details', s1_sub:'Required fields are marked with *.', cancel:'Cancel', next:'Next', back:'Back',
   err_req:'Please complete all required fields.', err_mail:'Please check the email address.', optional:'(optional)',
   s2:'2 · Hygiene briefing', scroll:'Please read to the end', err_bel:'Please confirm the briefing.',
@@ -351,7 +366,7 @@ async function loadForm(){
 /* ================= STATE ================= */
 let S;
 function resetState(){
-  S={vals:{}, belOk:false, gz:null, ds:false, sigDirty:false, sigLen:0};
+  S={vals:{}, auto:{}, belOk:false, gz:null, ds:false, sigDirty:false, sigLen:0};
   $('#f_suche').value='';
   $$('.msg').forEach(m=>m.classList.remove('on'));
   $('#ck_bel').classList.remove('on'); $('#ck_bel').classList.add('dis'); $('#next2').disabled=true;
@@ -385,27 +400,72 @@ function renderFelder(){
   if(!S) return;
   const g=$('#felder');
   g.innerHTML=felder().map(f=>{
+    const k=esc(f.key);
     const req=f.pflicht?' <em>*</em>':` <small style="color:var(--ink2);font-weight:500">${esc(u('optional'))}</small>`;
-    if(f.typ==='auswahl'){
-      return `<div class="full"><label class="f">${esc(L(f.label))}${req}</label><div class="chips" data-key="${esc(f.key)}">`+
-        (f.optionen||[]).map((o,i)=>`<button class="chip ${S.vals[f.key]===i?'on':''}" data-i="${i}">${esc(L(o))}</button>`).join('')+`</div></div>`;
+    if(f.typ==='auswahl'||f.typ==='mehrfach'){
+      const multi=f.typ==='mehrfach', cur=S.vals[f.key];
+      const on=i=>multi?(Array.isArray(cur)&&cur.includes(i)):cur===i;
+      return `<div class="full"><label class="f">${esc(L(f.label))}${req}${multi?` <small class="mhint">${esc(u('multi'))}</small>`:''}</label><div class="chips ${multi?'multi':''}" data-key="${k}">`+
+        (f.optionen||[]).map((o,i)=>`<button class="chip ${on(i)?'on':''}" data-i="${i}">${multi?'<span class="tick"></span>':''}${esc(L(o))}</button>`).join('')+`</div></div>`;
+    }
+    if(f.typ==='person'){
+      return `<div class="full"><div class="pgrid">
+        <div class="pwrap"><label class="f" for="fld_${k}">${esc(L(f.label))}${req}</label>
+          <input class="t" id="fld_${k}" data-key="${k}" data-person="${k}" type="text" autocapitalize="words" autocomplete="off" maxlength="120" value="${esc(S.vals[f.key]??'')}" placeholder="${esc((f.optionen||[]).length?u('person_ph'):'')}">
+          <div class="pdrop" id="pd_${k}"></div></div>
+        <div><label class="f" for="fld_${k}_abteilung">${esc(u('abteilung'))} <small style="color:var(--ink2);font-weight:500">${esc(u('optional'))}</small></label>
+          <input class="t" id="fld_${k}_abteilung" data-abt="${k}" type="text" autocomplete="off" maxlength="120" value="${esc(S.vals[f.key+'_abteilung']??'')}"></div>
+      </div></div>`;
     }
     const type=f.typ==='email'?'email':f.typ==='tel'?'tel':'text';
     const extra=f.typ==='email'?'inputmode="email" autocapitalize="off" spellcheck="false"':f.typ==='tel'?'inputmode="tel"':'autocapitalize="words"';
-    const dl=(f.optionen&&f.optionen.length)?`list="dl_${esc(f.key)}"`:'';
-    return `<div class="${f.breite==='voll'?'full':''}"><label class="f" for="fld_${esc(f.key)}">${esc(L(f.label))}${req}</label>
-      <input class="t" id="fld_${esc(f.key)}" data-key="${esc(f.key)}" type="${type}" ${extra} ${dl} autocomplete="off" maxlength="160" value="${esc(S.vals[f.key]??'')}">
-      ${dl?`<datalist id="dl_${esc(f.key)}">${f.optionen.map(o=>`<option value="${esc(L(o))}">`).join('')}</datalist>`:''}</div>`;
+    const dl=(f.optionen&&f.optionen.length)?`list="dl_${k}"`:'';
+    return `<div class="${f.breite==='voll'?'full':''}"><label class="f" for="fld_${k}">${esc(L(f.label))}${req}</label>
+      <input class="t" id="fld_${k}" data-key="${k}" type="${type}" ${extra} ${dl} autocomplete="off" maxlength="160" value="${esc(S.vals[f.key]??'')}">
+      ${dl?`<datalist id="dl_${k}">${f.optionen.map(o=>`<option value="${esc(L(o))}">`).join('')}</datalist>`:''}</div>`;
   }).join('');
   g.querySelectorAll('input[data-key]').forEach(i=>i.addEventListener('input',()=>{ S.vals[i.dataset.key]=i.value; i.classList.remove('err'); msg('#m_daten',''); }));
-  g.querySelectorAll('.chips').forEach(c=>c.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{ S.vals[c.dataset.key]=+b.dataset.i; msg('#m_daten',''); renderFelder(); }));
+  g.querySelectorAll('input[data-abt]').forEach(i=>i.addEventListener('input',()=>{ S.vals[i.dataset.abt+'_abteilung']=i.value; S.auto[i.dataset.abt]=false; }));
+  g.querySelectorAll('.chips').forEach(c=>c.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{
+    const key=c.dataset.key, i=+b.dataset.i;
+    if(c.classList.contains('multi')){ const a=Array.isArray(S.vals[key])?S.vals[key]:[]; S.vals[key]=a.includes(i)?a.filter(x=>x!==i):[...a,i].sort((x,y)=>x-y); }
+    else S.vals[key]=i;
+    c.classList.remove('err'); msg('#m_daten',''); renderFelder(); }));
+  g.querySelectorAll('input[data-person]').forEach(personFeld);
+}
+/* Ansprechpartner: Auswahl aus Mitarbeiterliste oder Freitext; Abteilung füllt sich automatisch */
+function personFeld(inp){
+  const key=inp.dataset.person, f=felder().find(x=>x.key===key), list=(f.optionen||[]).filter(o=>o.name);
+  const drop=$('#pd_'+CSS.escape(key)), abt=$('#fld_'+CSS.escape(key)+'_abteilung');
+  const norm=x=>String(x||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const setAbt=v=>{ abt.value=v; S.vals[key+'_abteilung']=v; S.auto[key]=!!v; };
+  const zeigen=()=>{
+    if(!list.length){ drop.classList.remove('on'); return; }
+    const q=norm(inp.value.trim());
+    const t=list.filter(o=>!q||norm(o.name).includes(q)||norm(o.abteilung).includes(q)).slice(0,30);
+    drop.innerHTML=t.length?t.map(o=>`<button type="button" data-n="${esc(o.name)}" data-a="${esc(o.abteilung||'')}"><b>${esc(o.name)}</b><span>${esc(o.abteilung||'')}</span></button>`).join('')
+      :`<div class="leer">${esc(u('person_frei'))}</div>`;
+    drop.classList.add('on');
+    drop.querySelectorAll('button').forEach(b=>b.addEventListener('pointerdown',e=>{ e.preventDefault();
+      inp.value=b.dataset.n; S.vals[key]=b.dataset.n; setAbt(b.dataset.a); inp.classList.remove('err'); drop.classList.remove('on'); inp.blur(); }));
+  };
+  inp.addEventListener('focus',zeigen);
+  inp.addEventListener('input',()=>{ const m=list.find(o=>norm(o.name)===norm(inp.value.trim()));
+    if(m) setAbt(m.abteilung||''); else if(S.auto[key]) setAbt('');
+    zeigen(); });
+  inp.addEventListener('blur',()=>setTimeout(()=>drop.classList.remove('on'),150));
 }
 function wert(f){ // Wert für Speicherung (Auswahl immer als deutscher Text)
   const v=S.vals[f.key];
   if(f.typ==='auswahl') return (v===undefined||v===null)?'':((f.optionen||[])[v]?.de||'');
+  if(f.typ==='mehrfach') return (Array.isArray(v)?v:[]).map(i=>(f.optionen||[])[i]?.de).filter(Boolean).join(', ');
   return String(v??'').trim();
 }
-function wertAnzeige(f){ const v=S.vals[f.key]; return f.typ==='auswahl'?L((f.optionen||[])[v]):String(v??'').trim(); }
+function wertAnzeige(f){ const v=S.vals[f.key];
+  if(f.typ==='auswahl') return L((f.optionen||[])[v]);
+  if(f.typ==='mehrfach') return (Array.isArray(v)?v:[]).map(i=>L((f.optionen||[])[i])).filter(Boolean).join(', ');
+  if(f.typ==='person'){ const a=String(S.vals[f.key+'_abteilung']??'').trim(); const n=String(v??'').trim(); return n&&a?`${n} (${a})`:n; }
+  return String(v??'').trim(); }
 $('#go-in').onclick=()=>{ resetState(); show('s-daten'); goFullscreen(); };
 $('#go-out').onclick=()=>{ resetState(); show('s-out'); goFullscreen(); };
 $$('[data-back]').forEach(b=>b.onclick=()=>{ if(b.dataset.back==='s-start') resetState(); show(b.dataset.back); });
@@ -413,7 +473,7 @@ $('#next1').onclick=()=>{
   let ok=true, mailbad=false;
   for(const f of felder()){
     const v=wert(f);
-    const el=f.typ==='auswahl'?$(`.chips[data-key="${CSS.escape(f.key)}"]`):$(`#fld_${CSS.escape(f.key)}`);
+    const el=(f.typ==='auswahl'||f.typ==='mehrfach')?$(`.chips[data-key="${CSS.escape(f.key)}"]`):$(`#fld_${CSS.escape(f.key)}`);
     let bad=f.pflicht&&!v;
     if(!bad && v && f.typ==='email' && !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(v)){ bad=true; mailbad=true; }
     if(el) el.classList.toggle('err',bad); if(bad) ok=false;
@@ -476,7 +536,8 @@ $('#submit').onclick=async()=>{
   if(!S.sigDirty||S.sigLen<60){ $('#sigwrap').classList.add('err'); return msg('#m_sig',u('err_sig')); }
   if(!S.ds){ $('#ck_ds').classList.add('err'); return msg('#m_sig',u('err_ds')); }
   msg('#m_sig',''); sending=true; const btn=$('#submit'); btn.disabled=true; btn.innerHTML=`<span class="spinner"></span>${esc(u('sending'))}`;
-  const angaben={}; felder().forEach(f=>{ if(!['vorname','nachname'].includes(f.key)){ const v=wert(f); if(v) angaben[f.key]=v; } });
+  const angaben={}; felder().forEach(f=>{ if(!['vorname','nachname'].includes(f.key)){ const v=wert(f); if(v) angaben[f.key]=v;
+    if(f.typ==='person'){ const a=String(S.vals[f.key+'_abteilung']??'').trim(); if(a) angaben[f.key+'_abteilung']=a; } } });
   const p={ vorname:wert({key:'vorname'}), nachname:wert({key:'nachname'}), angaben,
     belehrung_version:F.belehrung?.version||'?', belehrung_text:belPlain(lang), belehrung_bestaetigt:true,
     gesundheit_bestaetigt:S.gz===true, datenschutz_bestaetigt:true, sprache:lang, unterschrift:sigPNG(), geraet:'Kiosk '+(F.stammdaten?.standort||'') };
